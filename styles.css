@@ -1,14 +1,14 @@
 :root {
-  --bg: #111111;
-  --bg-soft: #1a1a1a;
-  --panel: #232323;
-  --panel-alt: #2f2f2f;
-  --line: rgba(255, 255, 255, 0.1);
-  --text: #f7f4ec;
-  --muted: #beb7aa;
-  --accent: #d9bf69;
-  --accent-strong: #f4d66b;
-  --danger: #ff8f7a;
+  --bg: #090909;
+  --bg-soft: #141414;
+  --panel: #171717;
+  --panel-alt: #232323;
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #fff8f8;
+  --muted: #d2c3c3;
+  --accent: #8a0d0d;
+  --accent-strong: #b80000;
+  --danger: #ff9c9c;
   --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
   --radius: 22px;
 }
@@ -21,8 +21,9 @@ body {
   margin: 0;
   font-family: "Segoe UI", "Aptos", sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(217, 191, 105, 0.16), transparent 25%),
-    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.06), transparent 20%),
+    radial-gradient(circle at top left, rgba(184, 0, 0, 0.18), transparent 24%),
+    radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.05), transparent 16%),
+    radial-gradient(circle at bottom right, rgba(184, 0, 0, 0.12), transparent 22%),
     var(--bg);
   color: var(--text);
 }
@@ -97,14 +98,14 @@ h1 {
 }
 
 .primary-btn {
-  background: var(--accent);
-  color: #17140f;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff6f6;
   padding: 14px 22px;
   font-weight: 700;
 }
 
 .ghost-btn {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(184, 0, 0, 0.08);
   color: var(--text);
   padding: 14px 22px;
   border: 1px solid var(--line);
@@ -135,7 +136,7 @@ h1 {
 
 .panel,
 .summary-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(184, 0, 0, 0.03));
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 20px;
@@ -211,8 +212,8 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(217, 191, 105, 0.16);
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px rgba(184, 0, 0, 0.18);
 }
 
 textarea {
@@ -253,7 +254,7 @@ textarea {
   width: 0;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  background: linear-gradient(90deg, #7d0000, var(--accent-strong));
   transition: width 0.2s ease;
 }
 
@@ -270,7 +271,7 @@ textarea {
 
 .summary-card.accent {
   background:
-    linear-gradient(140deg, rgba(217, 191, 105, 0.18), transparent 60%),
+    linear-gradient(140deg, rgba(184, 0, 0, 0.18), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
 }
 
@@ -363,9 +364,9 @@ textarea {
   align-items: center;
   border-radius: 999px;
   padding: 8px 12px;
-  background: rgba(217, 191, 105, 0.12);
-  border: 1px solid rgba(217, 191, 105, 0.22);
-  color: var(--accent-strong);
+  background: rgba(184, 0, 0, 0.12);
+  border: 1px solid rgba(184, 0, 0, 0.3);
+  color: #ffdddd;
 }
 
 .saved-item {

@@ -46,6 +46,57 @@ const productFieldIds = [
 const allFieldIds = [...generalFieldIds, ...productFieldIds];
 const storageKey = "gt-import-cost-quotes";
 
+const supplierCatalog = [
+  { supplierName: "ARGENTA CERAMICA SL ESP", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "ECOCERAMIC SLU ESP", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "EXAGRES SA ESP", family: "TORELOS Y PELDANOS", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "EUROSHRINK SA ESP", family: "PERFILES PVC Y ALUMINIO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "GLOBAL BRIDGE TRADING S.A.C PERU", family: "PORCELANATO", originCountry: "Peru", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Callao, Peru", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "FILA CHEMICALS USA, CORP. USA", family: "PRODUCTOS DE LIMPIEZA", originCountry: "Estados Unidos", currency: "USD", incoterm: "EXW", exportCost: 0, internalFreight: 330, daiRate: 15, originPort: "Miami, USA", destinationPort: "Almacenadora, Santo Tomas", containerSize: "FRGN", transportType: "Terrestre" },
+  { supplierName: "XIAMEN ZHONGGUANSHI STONE CO., LIMITED CHINA", family: "CUARZO GRANDES FORMATOS", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Yunfu, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "NEWARK CERAMIC INDIA", family: "PORCELANATO", originCountry: "India", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Mundra, India", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "TAIZHOU XUBO WATER CHINA", family: "GRIFERIA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Ningbo, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
+  { supplierName: "OVERSEAS MERCHANT INTERNATIONAL CHINA", family: "GRIFERIA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Ningbo, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
+  { supplierName: "TAIZHOU FEIGEER IMPORT & EXPORT CHINA", family: "GRIFERIA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Ningbo, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
+  { supplierName: "CHAOZHOU FENGXI MEITAO CERAMICS MANUFACTORY CHINA", family: "LOZA SANITARIA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Shekou, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
+  { supplierName: "SPANISH TILE FRON NULES SAU ESPANA", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "GETTING AIMS TEAM", family: "ANTIDESLISANTE", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 0, internalFreight: 225, daiRate: 0, originPort: "Barcelona, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "IMA GROUP", family: "PORCELANATO", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Sanshui, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "WUHAN HONGYANTENG TECHNOLOGY", family: "CUARZO", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Qingdao, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "MARMO BRAND", family: "GRANITO", originCountry: "Egipto", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Damietta, Egipto", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "MAPEI DE MEXICO", family: "ADHESIVO", originCountry: "Mexico", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Ciudad Hidalgo, Mexico", destinationPort: "Tecun Uman, Guatemala", containerSize: "FRGN", transportType: "Terrestre" },
+  { supplierName: "GUANGDONG OVS TECHNOLOGY CO LTD", family: "HIDROMASAJE", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Jiujiang, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
+  { supplierName: "KAIPING JUNYUAN IMPORT AND EXPORT TRADING CO LTD", family: "FREGADERO DE COCINA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Jiujiang, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
+  { supplierName: "JOMOLA INDUSTRY (HK) CO TD", family: "LAVAMANOS LAVATRASTOS", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Jiujiang, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
+  { supplierName: "ALPHA CERAMICA. CATO", family: "LOZA SANITARIA", originCountry: "Mexico", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Ciudad Hidalgo, Mexico", destinationPort: "Tecun Uman, Guatemala", containerSize: "FRGN", transportType: "Terrestre" },
+  { supplierName: "RUBI TOOLS", family: "ACCESORIOS PARA INSTALACION DE PISO", originCountry: "Espana", currency: "EUR", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Barcelona, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "GEOTILES", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "HALCON CERAMICAS", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "NAVARTI CERAMICA", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "PORCELANOSA", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "DILMUN EMPRESARIAL", family: "TABLA CERAMICA", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "COOPERATIVA CERAMICA D' IMOLA", family: "TABLA CERAMICA", originCountry: "Italia", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 1522.5, daiRate: 0, originPort: "Livorno, Italia", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "MARAZZI GROUP", family: "PORCELANATO", originCountry: "Italia", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 1522.5, daiRate: 0, originPort: "Livorno, Italia", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "PANARIA GROUP", family: "TABLA CERAMICA", originCountry: "Italia", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 1522.5, daiRate: 0, originPort: "Livorno, Italia", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "THESIZE SURFACES", family: "TABLA CERAMICA", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "GUANGDONG OVERLAND", family: "PORCELANATO", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Sanshui, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "FOSHAN YINGKANGSHUN", family: "MALLAS", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Foshan, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "DELTA FAUCET", family: "GRIFERIA", originCountry: "Estados Unidos", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 160, daiRate: 0, originPort: "Miami, USA", destinationPort: "Almacenadora, Santo Tomas", containerSize: "FRGN", transportType: "Terrestre" },
+  { supplierName: "ROCA SANITARIOS BRASIL", family: "LOZA SANITARIA", originCountry: "Brasil", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Santos, Brasil", destinationPort: "Santo Tomas de Castilla", containerSize: "40 HC", transportType: "Maritimo" }
+];
+
+const familyToCategoryMap = {
+  PORCELANATO: "Porcelanato",
+  CERAMICA: "Ceramica",
+  GRIFERIA: "Griferia",
+  "CUARZO GRANDES FORMATOS": "Grandes formatos",
+  "TABLA CERAMICA": "Grandes formatos",
+  LOZA: "Losa",
+  "LOZA SANITARIA": "Losa",
+  "CUARZO": "Grandes formatos",
+  "GRANITO": "Grandes formatos"
+};
+
 const portCatalogByCountry = {
   China: [
     { name: "Shanghai", surchargeFactor: 0.19 },
@@ -60,21 +111,28 @@ const portCatalogByCountry = {
     { name: "Chennai", surchargeFactor: 0.16 },
     { name: "Delhi", surchargeFactor: 0.26 }
   ],
+  Peru: [
+    { name: "Callao, Peru", surchargeFactor: 0.11 }
+  ],
   Mexico: [
     { name: "Manzanillo MX", surchargeFactor: 0.08 },
     { name: "Altamira", surchargeFactor: 0.07 },
     { name: "Veracruz", surchargeFactor: 0.07 },
-    { name: "Ciudad de Mexico AICM", surchargeFactor: 0.18 }
+    { name: "Ciudad de Mexico AICM", surchargeFactor: 0.18 },
+    { name: "Ciudad Hidalgo, Mexico", surchargeFactor: 0.06 }
   ],
   "Estados Unidos": [
     { name: "Miami", surchargeFactor: 0.1 },
+    { name: "Miami, USA", surchargeFactor: 0.1 },
     { name: "Los Angeles", surchargeFactor: 0.12 },
     { name: "Houston", surchargeFactor: 0.1 },
     { name: "New York JFK", surchargeFactor: 0.2 }
   ],
   Espana: [
     { name: "Valencia", surchargeFactor: 0.14 },
+    { name: "Valencia, Espana", surchargeFactor: 0.14 },
     { name: "Barcelona", surchargeFactor: 0.15 },
+    { name: "Barcelona, Espana", surchargeFactor: 0.15 },
     { name: "Algeciras", surchargeFactor: 0.14 },
     { name: "Madrid Barajas", surchargeFactor: 0.23 }
   ],
@@ -82,13 +140,18 @@ const portCatalogByCountry = {
     { name: "Genova", surchargeFactor: 0.15 },
     { name: "La Spezia", surchargeFactor: 0.16 },
     { name: "Livorno", surchargeFactor: 0.15 },
+    { name: "Livorno, Italia", surchargeFactor: 0.15 },
     { name: "Milan Malpensa", surchargeFactor: 0.24 }
   ],
   Brasil: [
     { name: "Santos", surchargeFactor: 0.12 },
+    { name: "Santos, Brasil", surchargeFactor: 0.12 },
     { name: "Itajai", surchargeFactor: 0.12 },
     { name: "Rio de Janeiro", surchargeFactor: 0.13 },
     { name: "Sao Paulo Guarulhos", surchargeFactor: 0.21 }
+  ],
+  Egipto: [
+    { name: "Damietta, Egipto", surchargeFactor: 0.18 }
   ],
   Colombia: [
     { name: "Cartagena", surchargeFactor: 0.06 },
@@ -110,11 +173,13 @@ const portCatalogByCountry = {
 const countryBaseFactor = {
   China: 0.24,
   India: 0.21,
+  Peru: 0.1,
   Mexico: 0.09,
   "Estados Unidos": 0.12,
   Espana: 0.17,
   Italia: 0.18,
   Brasil: 0.14,
+  Egipto: 0.2,
   Colombia: 0.08,
   Turquia: 0.19,
   Otro: 0.12
@@ -230,6 +295,36 @@ function ensureContainerFolio() {
 
 function getContainerProfile(containerSize) {
   return containerProfiles[containerSize] || containerProfiles.DEFAULT;
+}
+
+function ensureSelectOption(selectElement, value) {
+  if (!value) {
+    return;
+  }
+
+  const existingOption = Array.from(selectElement.options).find((option) => option.value === value);
+  if (existingOption) {
+    return;
+  }
+
+  const option = document.createElement("option");
+  option.value = value;
+  option.textContent = value;
+  selectElement.appendChild(option);
+}
+
+function populateSupplierOptions() {
+  const uniqueSuppliers = [...new Set(supplierCatalog.map((supplier) => supplier.supplierName))].sort();
+  uniqueSuppliers.forEach((supplierName) => {
+    const option = document.createElement("option");
+    option.value = supplierName;
+    option.textContent = supplierName;
+    els.supplierName.appendChild(option);
+  });
+}
+
+function getSupplierConfig(supplierName) {
+  return supplierCatalog.find((supplier) => supplier.supplierName === supplierName) || null;
 }
 
 function getGeneralData() {
@@ -531,7 +626,14 @@ function clearProductForm() {
 }
 
 function populateOriginPorts(country, selectedPort = "") {
-  const ports = portCatalogByCountry[country] || [];
+  const catalogPorts = portCatalogByCountry[country] || [];
+  const supplierPorts = supplierCatalog
+    .filter((supplier) => supplier.originCountry === country)
+    .map((supplier) => supplier.originPort);
+  const ports = [
+    ...catalogPorts.map((port) => port.name),
+    ...supplierPorts
+  ].filter((port, index, array) => port && array.indexOf(port) === index);
   els.originPort.innerHTML = "";
 
   const placeholder = document.createElement("option");
@@ -541,14 +643,48 @@ function populateOriginPorts(country, selectedPort = "") {
 
   ports.forEach((port) => {
     const option = document.createElement("option");
-    option.value = port.name;
-    option.textContent = port.name;
+    option.value = port;
+    option.textContent = port;
     els.originPort.appendChild(option);
   });
 
-  if (selectedPort && ports.some((port) => port.name === selectedPort)) {
+  if (selectedPort && ports.includes(selectedPort)) {
     els.originPort.value = selectedPort;
   }
+}
+
+function applySupplierDefaults() {
+  const supplier = getSupplierConfig(els.supplierName.value);
+  if (!supplier || els.supplierName.value === "MANUAL") {
+    renderSummary();
+    return;
+  }
+
+  ensureContainerFolio();
+  ensureSelectOption(els.originCountry, supplier.originCountry);
+  els.currency.value = supplier.currency;
+  els.incoterm.value = supplier.incoterm;
+  els.originCountry.value = supplier.originCountry;
+  populateOriginPorts(supplier.originCountry, supplier.originPort);
+  ensureSelectOption(els.destinationPort, supplier.destinationPort);
+  ensureSelectOption(els.entryPort, supplier.destinationPort);
+  ensureSelectOption(els.containerSize, supplier.containerSize);
+
+  els.originPort.value = supplier.originPort;
+  els.destinationPort.value = supplier.destinationPort;
+  els.entryPort.value = supplier.destinationPort;
+  els.containerSize.value = supplier.containerSize;
+  els.transportType.value = supplier.transportType;
+  els.exportCost.value = String(supplier.exportCost);
+  els.internalFreight.value = String(supplier.internalFreight);
+  els.daiRate.value = String(supplier.daiRate);
+
+  const mappedCategory = familyToCategoryMap[supplier.family];
+  if (mappedCategory) {
+    els.category.value = mappedCategory;
+  }
+
+  renderSummary();
 }
 
 function syncEntryPort() {
@@ -790,6 +926,10 @@ function loadQuote(id) {
       return;
     }
 
+    if (fieldId === "supplierName") {
+      ensureSelectOption(els.supplierName, quote.generalData[fieldId] ?? "");
+    }
+
     els[fieldId].value = quote.generalData[fieldId] ?? "";
   });
 
@@ -844,6 +984,8 @@ els.originCountry.addEventListener("change", () => {
   renderSummary();
 });
 
+els.supplierName.addEventListener("change", applySupplierDefaults);
+
 els.destinationPort.addEventListener("change", () => {
   syncEntryPort();
   renderSummary();
@@ -860,6 +1002,7 @@ saveQuoteBtn.addEventListener("click", saveQuote);
 resetBtn.addEventListener("click", resetAll);
 clearSavedBtn.addEventListener("click", clearAllSavedQuotes);
 
+populateSupplierOptions();
 populateOriginPorts("");
 syncEntryPort();
 renderSummary();
