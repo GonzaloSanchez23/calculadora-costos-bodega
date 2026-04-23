@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de costos en bodega</title>
+  <title>Costos en bodega</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app-shell">
     <header class="hero">
       <div>
-        <p class="eyebrow">Herramienta prorrateo Samboro</p>
-        <h1>Calculadora de costos en bodega</h1>
+        <p class="eyebrow">Prorrateo Samboro</p>
+        <h1>Costos en bodega</h1>
         <p class="hero-copy">
-          Centraliza el costo total para tener un producto ya en Guatemala, incluyendo compra,
-          logistica, aranceles, bodega y prorrateo entre varios productos dentro del mismo contenedor.
+          Centraliza el costo total de tener un producto ya en Guatemala.
         </p>
       </div>
       <div class="hero-actions">
-        <button id="saveQuoteBtn" class="primary-btn" type="button">Guardar cotizacion</button>
+        <button id="saveQuoteBtn" class="primary-btn" type="button">Guardar cotización</button>
         <button id="resetBtn" class="ghost-btn" type="button">Limpiar</button>
       </div>
     </header>
@@ -26,18 +25,18 @@
     <main class="workspace">
       <section class="form-grid">
         <article class="panel">
-          <h2>Operacion</h2>
+          <h2>Operación</h2>
           <div class="field-grid two-cols">
             <label>
-              <span>Nombre cotizacion</span>
+              <span>Nombre cotización</span>
               <input id="quoteName" name="quoteName" type="text" placeholder="Ej. Contenedor abril">
             </label>
             <label>
-              <span>Codigo importacion</span>
+              <span>Codigo importación</span>
               <input id="importCode" name="importCode" type="text" placeholder="IMP-2026-001">
             </label>
             <label>
-              <span>Bodega / ciudad en Guatemala</span>
+              <span>Bodega / Ciudad en Guatemala</span>
               <input id="warehouseLocation" name="warehouseLocation" type="text" placeholder="Ciudad de Guatemala">
             </label>
             <label>
@@ -48,7 +47,7 @@
         </article>
 
         <article class="panel">
-          <h2>Proveedor importacion</h2>
+          <h2>Proveedor importación</h2>
           <div class="field-grid two-cols">
             <label>
               <span>Proveedor</span>
@@ -77,6 +76,7 @@
                 <option value="FOB">FOB</option>
                 <option value="CIF">CIF</option>
                 <option value="DAP">DAP</option>
+                <option value="FCA">FCA</option>
                 <option value="DDP">DDP</option>
               </select>
             </label>
@@ -90,15 +90,15 @@
               </select>
             </label>
             <label>
-              <span>Pais de origen</span>
+              <span>País de origen</span>
               <select id="originCountry" name="originCountry">
-                <option value="">Seleccionar pais</option>
+                <option value="">Seleccionar país</option>
                 <option value="China">China</option>
                 <option value="India">India</option>
-                <option value="Mexico">Mexico</option>
+                <option value="México">México</option>
                 <option value="Peru">Peru</option>
                 <option value="Estados Unidos">Estados Unidos</option>
-                <option value="Espana">Espana</option>
+                <option value="España">España</option>
                 <option value="Italia">Italia</option>
                 <option value="Brasil">Brasil</option>
                 <option value="Colombia">Colombia</option>
@@ -128,7 +128,7 @@
               </select>
             </label>
             <label>
-              <span>Tamano contenedor</span>
+              <span>Tamaño contenedor</span>
               <select id="containerSize" name="containerSize">
                 <option value="">No aplica</option>
                 <option value="20 pies">20 pies</option>
@@ -142,10 +142,10 @@
         </article>
 
         <article class="panel">
-          <h2>Logistica internacional</h2>
+          <h2>Logística internacional</h2>
           <div class="field-grid two-cols">
             <label>
-              <span>Costo exportacion (aduana salida) (moneda proveedor)</span>
+              <span>Costo exportación (aduana salida) (moneda proveedor)</span>
               <input id="exportCost" name="exportCost" type="number" min="0" step="0.01" value="0">
             </label>
             <label>
@@ -164,7 +164,7 @@
         </article>
 
         <article class="panel">
-          <h2>Logistica local Guatemala</h2>
+          <h2>Logística local Guatemala</h2>
           <div class="field-grid two-cols">
             <label>
               <span>Puerto de ingreso</span>
@@ -205,7 +205,7 @@
               <input id="localFreight" name="localFreight" type="number" min="0" step="0.01" value="0">
             </label>
             <label>
-              <span>Manipulacion / descarga (Q)</span>
+              <span>Manipulación / descarga (Q)</span>
               <input id="handlingCost" name="handlingCost" type="number" min="0" step="0.01" value="0">
             </label>
           </div>
@@ -215,7 +215,7 @@
           <div class="panel-title-row">
             <div>
               <h2>Producto del contenedor</h2>
-              <p class="section-copy">Agrega uno o varios productos. La logistica general se mantiene en el mismo contenedor.</p>
+              <p class="section-copy">Agrega uno o varios productos. La logística general se mantiene en el mismo contenedor.</p>
             </div>
             <div class="stack-actions">
               <button id="addProductBtn" class="primary-btn" type="button">Agregar producto</button>
@@ -227,10 +227,10 @@
             <label>
               <span>Categoria</span>
               <select id="category" name="category">
-                <option value="">Seleccionar categoria</option>
+                <option value="">Seleccionar categoría</option>
                 <option value="Porcelanato">Porcelanato</option>
-                <option value="Ceramica">Ceramica</option>
-                <option value="Griferia">Griferia</option>
+                <option value="Ceramica">Cerámica</option>
+                <option value="Griferia">Grifería</option>
                 <option value="Grandes formatos">Grandes formatos</option>
                 <option value="Losa">Losa</option>
               </select>
@@ -240,8 +240,10 @@
               <select id="format" name="format">
                 <option value="">Seleccionar formato</option>
                 <option value="30x30 cm">30x30 cm</option>
+                <option value="43x43 cm">43x43 cm</option>
                 <option value="45x45 cm">45x45 cm</option>
                 <option value="60x60 cm">60x60 cm</option>
+                <option value="60x60 cm">60x90 cm</option>
                 <option value="60x120 cm">60x120 cm</option>
                 <option value="120x120 cm">120x120 cm</option>
                 <option value="Formato especial">Formato especial</option>
@@ -256,10 +258,10 @@
               <select id="body" name="body">
                 <option value="">Seleccionar cuerpo</option>
                 <option value="Porcelanato">Porcelanato</option>
-                <option value="Ceramica">Ceramica</option>
+                <option value="Cerámica">Cerámica</option>
                 <option value="Acero">Acero</option>
                 <option value="Aluminio">Aluminio</option>
-                <option value="Plastico">Plastico</option>
+                <option value="Plástico">Plástico</option>
                 <option value="Vidrio">Vidrio</option>
                 <option value="Otro">Otro</option>
               </select>
@@ -344,7 +346,7 @@
 
           <div class="capacity-card">
             <div>
-              <span class="capacity-label">Ocupacion estimada del siguiente producto</span>
+              <span class="capacity-label">Ocupación estimada del siguiente producto</span>
               <strong id="draftCapacityLabel">0.00%</strong>
             </div>
             <div>
@@ -394,7 +396,7 @@
               <strong id="containerFolioLabel">Pendiente</strong>
             </div>
             <div>
-              <span>Ocupacion usada</span>
+              <span>Ocupación usada</span>
               <strong id="usedCapacitySummary">0.00%</strong>
             </div>
             <div>
