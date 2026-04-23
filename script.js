@@ -47,10 +47,10 @@ const allFieldIds = [...generalFieldIds, ...productFieldIds];
 const storageKey = "gt-import-cost-quotes";
 
 const supplierCatalog = [
-  { supplierName: "ARGENTA CERAMICA SL ESP", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "ECOCERAMIC SLU ESP", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "EXAGRES SA ESP", family: "TORELOS Y PELDANOS", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "EUROSHRINK SA ESP", family: "PERFILES PVC Y ALUMINIO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "ARGENTA CERAMICA SL ESP", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "ECOCERAMIC SLU ESP", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "EXAGRES SA ESP", family: "TORELOS Y PELDANOS", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "EUROSHRINK SA ESP", family: "PERFILES PVC Y ALUMINIO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "GLOBAL BRIDGE TRADING S.A.C PERU", family: "PORCELANATO", originCountry: "Peru", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Callao, Peru", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "FILA CHEMICALS USA, CORP. USA", family: "PRODUCTOS DE LIMPIEZA", originCountry: "Estados Unidos", currency: "USD", incoterm: "EXW", exportCost: 0, internalFreight: 330, daiRate: 15, originPort: "Miami, USA", destinationPort: "Almacenadora, Santo Tomas", containerSize: "FRGN", transportType: "Terrestre" },
   { supplierName: "XIAMEN ZHONGGUANSHI STONE CO., LIMITED CHINA", family: "CUARZO GRANDES FORMATOS", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Yunfu, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
@@ -59,26 +59,26 @@ const supplierCatalog = [
   { supplierName: "OVERSEAS MERCHANT INTERNATIONAL CHINA", family: "GRIFERIA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Ningbo, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
   { supplierName: "TAIZHOU FEIGEER IMPORT & EXPORT CHINA", family: "GRIFERIA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Ningbo, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
   { supplierName: "CHAOZHOU FENGXI MEITAO CERAMICS MANUFACTORY CHINA", family: "LOZA SANITARIA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Shekou, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
-  { supplierName: "SPANISH TILE FRON NULES SAU ESPANA", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "GETTING AIMS TEAM", family: "ANTIDESLISANTE", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 0, internalFreight: 225, daiRate: 0, originPort: "Barcelona, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "SPANISH TILE FRON NULES SAU España", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "GETTING AIMS TEAM", family: "ANTIDESLISANTE", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 0, internalFreight: 225, daiRate: 0, originPort: "Barcelona, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "IMA GROUP", family: "PORCELANATO", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Sanshui, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "WUHAN HONGYANTENG TECHNOLOGY", family: "CUARZO", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Qingdao, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "MARMO BRAND", family: "GRANITO", originCountry: "Egipto", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Damietta, Egipto", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "MAPEI DE MEXICO", family: "ADHESIVO", originCountry: "Mexico", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Ciudad Hidalgo, Mexico", destinationPort: "Tecun Uman, Guatemala", containerSize: "FRGN", transportType: "Terrestre" },
+  { supplierName: "MAPEI DE México", family: "ADHESIVO", originCountry: "México", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Ciudad Hidalgo, México", destinationPort: "Tecun Uman, Guatemala", containerSize: "FRGN", transportType: "Terrestre" },
   { supplierName: "GUANGDONG OVS TECHNOLOGY CO LTD", family: "HIDROMASAJE", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Jiujiang, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
   { supplierName: "KAIPING JUNYUAN IMPORT AND EXPORT TRADING CO LTD", family: "FREGADERO DE COCINA", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Jiujiang, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
   { supplierName: "JOMOLA INDUSTRY (HK) CO TD", family: "LAVAMANOS LAVATRASTOS", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Jiujiang, China", destinationPort: "Puerto Quetzal", containerSize: "40 HC", transportType: "Maritimo" },
-  { supplierName: "ALPHA CERAMICA. CATO", family: "LOZA SANITARIA", originCountry: "Mexico", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Ciudad Hidalgo, Mexico", destinationPort: "Tecun Uman, Guatemala", containerSize: "FRGN", transportType: "Terrestre" },
-  { supplierName: "RUBI TOOLS", family: "ACCESORIOS PARA INSTALACION DE PISO", originCountry: "Espana", currency: "EUR", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Barcelona, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "GEOTILES", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "HALCON CERAMICAS", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "NAVARTI CERAMICA", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "PORCELANOSA", family: "PORCELANATO", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "DILMUN EMPRESARIAL", family: "TABLA CERAMICA", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "ALPHA CERAMICA. CATO", family: "LOZA SANITARIA", originCountry: "México", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Ciudad Hidalgo, México", destinationPort: "Tecun Uman, Guatemala", containerSize: "FRGN", transportType: "Terrestre" },
+  { supplierName: "RUBI TOOLS", family: "ACCESORIOS PARA INSTALACION DE PISO", originCountry: "España", currency: "EUR", incoterm: "FCA", exportCost: 0, internalFreight: 0, daiRate: 0, originPort: "Barcelona, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "GEOTILES", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "HALCON CERAMICAS", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "NAVARTI CERAMICA", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "PORCELANOSA", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "DILMUN EMPRESARIAL", family: "TABLA CERAMICA", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "COOPERATIVA CERAMICA D' IMOLA", family: "TABLA CERAMICA", originCountry: "Italia", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 1522.5, daiRate: 0, originPort: "Livorno, Italia", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "MARAZZI GROUP", family: "PORCELANATO", originCountry: "Italia", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 1522.5, daiRate: 0, originPort: "Livorno, Italia", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "PANARIA GROUP", family: "TABLA CERAMICA", originCountry: "Italia", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 1522.5, daiRate: 0, originPort: "Livorno, Italia", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
-  { supplierName: "THESIZE SURFACES", family: "TABLA CERAMICA", originCountry: "Espana", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, Espana", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
+  { supplierName: "THESIZE SURFACES", family: "TABLA CERAMICA", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "GUANGDONG OVERLAND", family: "PORCELANATO", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Sanshui, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "FOSHAN YINGKANGSHUN", family: "MALLAS", originCountry: "China", currency: "USD", incoterm: "FOB", exportCost: 0, internalFreight: 0, daiRate: 15, originPort: "Foshan, China", destinationPort: "Puerto Quetzal", containerSize: "20 pies", transportType: "Maritimo" },
   { supplierName: "DELTA FAUCET", family: "GRIFERIA", originCountry: "Estados Unidos", currency: "USD", incoterm: "FCA", exportCost: 0, internalFreight: 160, daiRate: 0, originPort: "Miami, USA", destinationPort: "Almacenadora, Santo Tomas", containerSize: "FRGN", transportType: "Terrestre" },
@@ -114,12 +114,12 @@ const portCatalogByCountry = {
   Peru: [
     { name: "Callao, Peru", surchargeFactor: 0.11 }
   ],
-  Mexico: [
+  México: [
     { name: "Manzanillo MX", surchargeFactor: 0.08 },
     { name: "Altamira", surchargeFactor: 0.07 },
     { name: "Veracruz", surchargeFactor: 0.07 },
-    { name: "Ciudad de Mexico AICM", surchargeFactor: 0.18 },
-    { name: "Ciudad Hidalgo, Mexico", surchargeFactor: 0.06 }
+    { name: "Ciudad de México AICM", surchargeFactor: 0.18 },
+    { name: "Ciudad Hidalgo, México", surchargeFactor: 0.06 }
   ],
   "Estados Unidos": [
     { name: "Miami", surchargeFactor: 0.1 },
@@ -128,24 +128,21 @@ const portCatalogByCountry = {
     { name: "Houston", surchargeFactor: 0.1 },
     { name: "New York JFK", surchargeFactor: 0.2 }
   ],
-  Espana: [
+  España: [
     { name: "Valencia", surchargeFactor: 0.14 },
-    { name: "Valencia, Espana", surchargeFactor: 0.14 },
     { name: "Barcelona", surchargeFactor: 0.15 },
-    { name: "Barcelona, Espana", surchargeFactor: 0.15 },
     { name: "Algeciras", surchargeFactor: 0.14 },
-    { name: "Madrid Barajas", surchargeFactor: 0.23 }
+    { name: "Madrid", surchargeFactor: 0.23 }
   ],
   Italia: [
     { name: "Genova", surchargeFactor: 0.15 },
     { name: "La Spezia", surchargeFactor: 0.16 },
     { name: "Livorno", surchargeFactor: 0.15 },
-    { name: "Livorno, Italia", surchargeFactor: 0.15 },
+    { name: "Livorno", surchargeFactor: 0.15 },
     { name: "Milan Malpensa", surchargeFactor: 0.24 }
   ],
   Brasil: [
     { name: "Santos", surchargeFactor: 0.12 },
-    { name: "Santos, Brasil", surchargeFactor: 0.12 },
     { name: "Itajai", surchargeFactor: 0.12 },
     { name: "Rio de Janeiro", surchargeFactor: 0.13 },
     { name: "Sao Paulo Guarulhos", surchargeFactor: 0.21 }
@@ -174,9 +171,9 @@ const countryBaseFactor = {
   China: 0.24,
   India: 0.21,
   Peru: 0.1,
-  Mexico: 0.09,
+  México: 0.09,
   "Estados Unidos": 0.12,
-  Espana: 0.17,
+  España: 0.17,
   Italia: 0.18,
   Brasil: 0.14,
   Egipto: 0.2,
