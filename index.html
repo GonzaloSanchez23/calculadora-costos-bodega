@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de costos en bodega</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Herramienta prorrateo Samboro</p>
+        <h1>Calculadora de costos en bodega</h1>
+        <p class="hero-copy">
+          Centraliza el costo total para tener un producto ya en Guatemala, incluyendo compra,
+          logistica, aranceles, bodega y prorrateo entre varios productos dentro del mismo contenedor.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="saveQuoteBtn" class="primary-btn" type="button">Guardar cotizacion</button>
+        <button id="resetBtn" class="ghost-btn" type="button">Limpiar</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="form-grid">
+        <article class="panel">
+          <h2>Operacion</h2>
+          <div class="field-grid two-cols">
+            <label>
+              <span>Nombre cotizacion</span>
+              <input id="quoteName" name="quoteName" type="text" placeholder="Ej. Contenedor abril">
+            </label>
+            <label>
+              <span>Codigo importacion</span>
+              <input id="importCode" name="importCode" type="text" placeholder="IMP-2026-001">
+            </label>
+            <label>
+              <span>Bodega / ciudad en Guatemala</span>
+              <input id="warehouseLocation" name="warehouseLocation" type="text" placeholder="Ciudad de Guatemala">
+            </label>
+            <label>
+              <span>Destino final</span>
+              <input id="finalDestination" name="finalDestination" type="text" placeholder="Zona 12 / Quetzaltenango">
+            </label>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Proveedor importacion</h2>
+          <div class="field-grid two-cols">
+            <label>
+              <span>Proveedor</span>
+              <input id="supplierName" name="supplierName" type="text" placeholder="Nombre del proveedor">
+            </label>
+            <label>
+              <span>Moneda</span>
+              <select id="currency" name="currency">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="CNY">CNY</option>
+                <option value="GTQ">GTQ</option>
+              </select>
+            </label>
+            <label>
+              <span>Tipo de cambio a GTQ</span>
+              <input id="exchangeRate" name="exchangeRate" type="number" min="0" step="0.0001" value="7.8">
+            </label>
+            <label>
+              <span>INCOTERMS</span>
+              <select id="incoterm" name="incoterm">
+                <option value="EXW">EXW</option>
+                <option value="FOB">FOB</option>
+                <option value="CIF">CIF</option>
+                <option value="DAP">DAP</option>
+                <option value="DDP">DDP</option>
+              </select>
+            </label>
+            <label>
+              <span>Tipo transporte</span>
+              <select id="transportType" name="transportType">
+                <option value="Maritimo">Maritimo</option>
+                <option value="Aereo">Aereo</option>
+                <option value="Terrestre">Terrestre</option>
+                <option value="Courier">Courier</option>
+              </select>
+            </label>
+            <label>
+              <span>Pais de origen</span>
+              <select id="originCountry" name="originCountry">
+                <option value="">Seleccionar pais</option>
+                <option value="China">China</option>
+                <option value="India">India</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Estados Unidos">Estados Unidos</option>
+                <option value="Espana">Espana</option>
+                <option value="Italia">Italia</option>
+                <option value="Brasil">Brasil</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Turquia">Turquia</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </label>
+            <label>
+              <span>Puerto / aeropuerto origen</span>
+              <select id="originPort" name="originPort">
+                <option value="">Seleccionar origen</option>
+              </select>
+            </label>
+            <label>
+              <span>Puerto / aeropuerto destino</span>
+              <select id="destinationPort" name="destinationPort">
+                <option value="">Seleccionar destino</option>
+                <option value="Santo Tomas de Castilla">Santo Tomas de Castilla</option>
+                <option value="Puerto Quetzal">Puerto Quetzal</option>
+                <option value="Aeropuerto La Aurora">Aeropuerto La Aurora</option>
+                <option value="Tecun Uman">Tecun Uman</option>
+                <option value="Pedro de Alvarado">Pedro de Alvarado</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </label>
+            <label>
+              <span>Tamano contenedor</span>
+              <select id="containerSize" name="containerSize">
+                <option value="">No aplica</option>
+                <option value="20 pies">20 pies</option>
+                <option value="40 pies">40 pies</option>
+                <option value="40 HC">40 HC</option>
+                <option value="LCL">LCL</option>
+              </select>
+            </label>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Logistica internacional</h2>
+          <div class="field-grid two-cols">
+            <label>
+              <span>Costo exportacion (aduana salida) (moneda proveedor)</span>
+              <input id="exportCost" name="exportCost" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Flete interno origen (moneda proveedor)</span>
+              <input id="internalFreight" name="internalFreight" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Flete internacional (moneda proveedor)</span>
+              <input id="internationalFreight" name="internationalFreight" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Seguro internacional (moneda proveedor)</span>
+              <input id="insuranceCost" name="insuranceCost" type="number" min="0" step="0.01" value="0">
+            </label>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Logistica local Guatemala</h2>
+          <div class="field-grid two-cols">
+            <label>
+              <span>Puerto de ingreso</span>
+              <select id="entryPort" name="entryPort">
+                <option value="">Seleccionar puerto</option>
+                <option value="Santo Tomas de Castilla">Santo Tomas de Castilla</option>
+                <option value="Puerto Quetzal">Puerto Quetzal</option>
+                <option value="Aeropuerto La Aurora">Aeropuerto La Aurora</option>
+                <option value="Tecun Uman">Tecun Uman</option>
+                <option value="Pedro de Alvarado">Pedro de Alvarado</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </label>
+            <label>
+              <span>Porcentaje DAI</span>
+              <input id="daiRate" name="daiRate" type="number" min="0" step="0.01" value="12">
+            </label>
+            <label>
+              <span>Honorarios aduanales (Q)</span>
+              <input id="customsFees" name="customsFees" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Gastos documentos (Q)</span>
+              <input id="documentFees" name="documentFees" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Gastos extras (Q)</span>
+              <input id="extraFees" name="extraFees" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Costo bodega / almacenaje (Q)</span>
+              <input id="warehouseCost" name="warehouseCost" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Transporte local a destino (Q)</span>
+              <input id="localFreight" name="localFreight" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Manipulacion / descarga (Q)</span>
+              <input id="handlingCost" name="handlingCost" type="number" min="0" step="0.01" value="0">
+            </label>
+          </div>
+        </article>
+
+        <article class="panel panel-wide">
+          <div class="panel-title-row">
+            <div>
+              <h2>Producto del contenedor</h2>
+              <p class="section-copy">Agrega uno o varios productos. La logistica general se mantiene en el mismo contenedor.</p>
+            </div>
+            <div class="stack-actions">
+              <button id="addProductBtn" class="primary-btn" type="button">Agregar producto</button>
+              <button id="clearProductBtn" class="ghost-btn" type="button">Limpiar producto</button>
+            </div>
+          </div>
+
+          <div class="field-grid three-cols">
+            <label>
+              <span>Categoria</span>
+              <select id="category" name="category">
+                <option value="">Seleccionar categoria</option>
+                <option value="Porcelanato">Porcelanato</option>
+                <option value="Ceramica">Ceramica</option>
+                <option value="Griferia">Griferia</option>
+                <option value="Grandes formatos">Grandes formatos</option>
+                <option value="Losa">Losa</option>
+              </select>
+            </label>
+            <label>
+              <span>Formato</span>
+              <select id="format" name="format">
+                <option value="">Seleccionar formato</option>
+                <option value="30x30 cm">30x30 cm</option>
+                <option value="45x45 cm">45x45 cm</option>
+                <option value="60x60 cm">60x60 cm</option>
+                <option value="60x120 cm">60x120 cm</option>
+                <option value="120x120 cm">120x120 cm</option>
+                <option value="Formato especial">Formato especial</option>
+              </select>
+            </label>
+            <label>
+              <span>Producto</span>
+              <input id="productName" name="productName" type="text" placeholder="Nombre del producto">
+            </label>
+            <label>
+              <span>Cuerpo</span>
+              <select id="body" name="body">
+                <option value="">Seleccionar cuerpo</option>
+                <option value="Porcelanato">Porcelanato</option>
+                <option value="Ceramica">Ceramica</option>
+                <option value="Acero">Acero</option>
+                <option value="Aluminio">Aluminio</option>
+                <option value="Plastico">Plastico</option>
+                <option value="Vidrio">Vidrio</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </label>
+            <label>
+              <span>Acabado</span>
+              <select id="finish" name="finish">
+                <option value="">Seleccionar acabado</option>
+                <option value="Mate">Mate</option>
+                <option value="Brillante">Brillante</option>
+                <option value="Satinado">Satinado</option>
+                <option value="Pulido">Pulido</option>
+                <option value="Rustico">Rustico</option>
+                <option value="Texturizado">Texturizado</option>
+              </select>
+            </label>
+            <label>
+              <span>Borde</span>
+              <select id="edge" name="edge">
+                <option value="">Seleccionar borde</option>
+                <option value="Rectificado">Rectificado</option>
+                <option value="No rectificado">No rectificado</option>
+                <option value="Biselado">Biselado</option>
+                <option value="Redondeado">Redondeado</option>
+              </select>
+            </label>
+            <label>
+              <span>Espesor</span>
+              <select id="thickness" name="thickness">
+                <option value="">Seleccionar espesor</option>
+                <option value="7 mm">7 mm</option>
+                <option value="8 mm">8 mm</option>
+                <option value="9 mm">9 mm</option>
+                <option value="10 mm">10 mm</option>
+                <option value="12 mm">12 mm</option>
+                <option value="20 mm">20 mm</option>
+              </select>
+            </label>
+            <label>
+              <span>Calidad</span>
+              <select id="quality" name="quality">
+                <option value="">Seleccionar calidad</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="Comercial">Comercial</option>
+              </select>
+            </label>
+            <label>
+              <span>Unidad de medida</span>
+              <select id="unitMeasure" name="unitMeasure">
+                <option value="Unidad">Unidad</option>
+                <option value="M2">M2</option>
+                <option value="M3">M3</option>
+                <option value="MT">MT</option>
+                <option value="Caja">Caja</option>
+                <option value="Pallet">Pallet</option>
+              </select>
+            </label>
+            <label>
+              <span>Costo unitario producto (moneda proveedor)</span>
+              <input id="unitCost" name="unitCost" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Cantidad</span>
+              <input id="quantity" name="quantity" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Embalaje total (moneda proveedor)</span>
+              <input id="packagingCost" name="packagingCost" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>Margen objetivo %</span>
+              <input id="marginRate" name="marginRate" type="number" min="0" step="0.01" value="25">
+            </label>
+            <label class="span-2">
+              <span>Observaciones del producto</span>
+              <textarea id="notes" name="notes" rows="3" placeholder="Notas para el equipo"></textarea>
+            </label>
+          </div>
+
+          <div class="capacity-card">
+            <div>
+              <span class="capacity-label">Ocupacion estimada del siguiente producto</span>
+              <strong id="draftCapacityLabel">0.00%</strong>
+            </div>
+            <div>
+              <span class="capacity-label">Espacio restante estimado</span>
+              <strong id="remainingCapacityLabel">100.00%</strong>
+            </div>
+            <div class="progress-track">
+              <div id="capacityProgress" class="progress-fill"></div>
+            </div>
+            <p id="capacityHint" class="section-copy">Agrega productos hasta completar la capacidad del contenedor.</p>
+          </div>
+        </article>
+
+        <article class="panel panel-wide">
+          <div class="panel-title-row">
+            <div>
+              <h2>Productos agregados al contenedor</h2>
+              <p class="section-copy">El prorrateo se distribuye entre los productos segun su ocupacion estimada.</p>
+            </div>
+            <span id="productCountBadge" class="badge">0 productos</span>
+          </div>
+          <div id="productsList" class="products-list">
+            <p class="empty-state">Aun no hay productos agregados al contenedor.</p>
+          </div>
+        </article>
+      </section>
+
+      <aside class="summary-column">
+        <section class="summary-card">
+          <h2>Resumen de costos</h2>
+          <div class="metric-list">
+            <div><span>Productos en contenedor</span><strong id="productCountLabel">0</strong></div>
+            <div><span>Costo producto</span><strong id="productTotalLabel">Q 0.00</strong></div>
+            <div><span>Subtotal CIF estimado</span><strong id="cifTotalLabel">Q 0.00</strong></div>
+            <div><span>DAI</span><strong id="daiTotalLabel">Q 0.00</strong></div>
+            <div><span>Gastos locales</span><strong id="localChargesLabel">Q 0.00</strong></div>
+            <div><span>Costo total en bodega</span><strong id="landedTotalLabel">Q 0.00</strong></div>
+            <div><span>Precio sugerido promedio</span><strong id="suggestedPriceLabel">Q 0.00</strong></div>
+          </div>
+        </section>
+
+        <section class="summary-card accent">
+          <h2>Control del contenedor</h2>
+          <div class="mini-grid">
+            <div>
+              <span>Folio contenedor</span>
+              <strong id="containerFolioLabel">Pendiente</strong>
+            </div>
+            <div>
+              <span>Ocupacion usada</span>
+              <strong id="usedCapacitySummary">0.00%</strong>
+            </div>
+            <div>
+              <span>Capacidad restante</span>
+              <strong id="remainingCapacitySummary">100.00%</strong>
+            </div>
+            <div>
+              <span>Proveedor</span>
+              <strong id="quickSupplier">-</strong>
+            </div>
+            <div>
+              <span>Transporte</span>
+              <strong id="quickTransport">-</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="summary-card">
+          <div class="saved-header">
+            <h2>Cotizaciones guardadas</h2>
+            <button id="clearSavedBtn" class="text-btn" type="button">Borrar todo</button>
+          </div>
+          <div id="savedQuotes" class="saved-list">
+            <p class="empty-state">Aun no hay cotizaciones guardadas.</p>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
