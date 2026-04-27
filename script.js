@@ -985,7 +985,7 @@ function buildSharePointRecordsFromQuote(quote) {
     SupplierName: quote.generalData.supplierName || "",
     SavedAt: savedAtIso,
     UserEmail: userEmail,
-    PayloadJSON: JSON.stringify(quote),
+    PayloadJSONFull: JSON.stringify(quote),
     WarehouseCity: quote.generalData.warehouseLocation || "",
     FinalDestination: quote.generalData.finalDestination || "",
     Currency: quote.generalData.currency || "",
