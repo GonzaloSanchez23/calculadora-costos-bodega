@@ -313,10 +313,10 @@ function handleLogin(event) {
 function togglePasswordVisibility() {
   const isPassword = loginPassword.type === "password";
   loginPassword.type = isPassword ? "text" : "password";
-  togglePasswordBtn.textContent = isPassword ? "🙈" : "👁";
+  togglePasswordBtn.textContent = isPassword ? "👁" : "👁";
   togglePasswordBtn.setAttribute(
     "aria-label",
-    isPassword ? "Ocultar contraseÃ±a" : "Mostrar contraseÃ±a"
+    isPassword ? "Ocultar contraseña" : "Mostrar contraseña"
   );
 }
 
