@@ -248,6 +248,7 @@ const resetBtn = document.getElementById("resetBtn");
 const clearSavedBtn = document.getElementById("clearSavedBtn");
 const addProductBtn = document.getElementById("addProductBtn");
 const clearProductBtn = document.getElementById("clearProductBtn");
+const FLOW_SAVE_URL = "https://7e55d88804bae045b253b2537135e3.0d.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/9050380bc99f45b5a5ff8cae21634782/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bE6ktvvRmH3dT6YafXddAfXBL-qXEEE5ELYHQQCOH0Y";
 
 const state = {
   products: [],
@@ -844,30 +845,47 @@ function getQuotePayload() {
   };
 }
 
-function saveQuote() {
-  if (!state.products.length) {
-    const draft = getProductDraft();
-    if (draft.productName.trim() && toNumber(draft.quantity) > 0) {
-      const shouldAdd = window.confirm(
-        "Tienes un producto capturado pero aun no agregado. Deseas agregarlo al contenedor antes de guardar?"
-      );
-      if (shouldAdd) {
-        addProductToContainer();
-      }
+async function saveQuote() {
+  const payload = {
+    id: crypto.randomUUID(),
+    containerFolio: ensureContainerFolio(),
+    savedAt: Date.now(),
+    generalData: {
+      quoteName: els.quoteName.value || "",
+      importCode: els.importCode.value || "",
+      supplierName: els.supplierName.value || ""
     }
-  }
+  };
 
-  if (!state.products.length) {
-    window.alert("Agrega al menos un producto al contenedor antes de guardar la cotizacion.");
+  if (!payload.generalData.quoteName.trim()) {
+    window.alert("Ingresa al menos el nombre de la cotización.");
     return;
   }
 
-  const quote = getQuotePayload();
-  const quotes = getSavedQuotes();
-  quotes.push(quote);
-  setSavedQuotes(quotes);
-  renderSavedQuotes();
-  window.alert("Cotizacion guardada localmente. En el siguiente paso la conectamos a SharePoint List.");
+  try {
+    saveQuoteBtn.disabled = true;
+    saveQuoteBtn.textContent = "Guardando...";
+
+    const response = await fetch(FLOW_SAVE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    window.alert("Solicitud enviada correctamente. Revisa SharePoint y el historial del flujo.");
+  } catch (error) {
+    console.error("Error al guardar en Power Automate:", error);
+    window.alert("Error al guardar. Revisa la URL del flujo y la ejecución en Power Automate.");
+  } finally {
+    saveQuoteBtn.disabled = false;
+    saveQuoteBtn.textContent = "Guardar cotización";
+  }
 }
 
 function renderSavedQuotes() {
