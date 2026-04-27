@@ -7,7 +7,32 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app-shell">
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <p class="eyebrow">Prorrateo Samboro</p>
+        <h1>Ingreso a costos en bodega</h1>
+        <p class="hero-copy">
+          Accede con tu correo y contraseÃ±a para entrar a la calculadora.
+        </p>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <label>
+          <span>Correo</span>
+          <input id="loginEmail" type="email" placeholder="nombre@empresa.com" autocomplete="username">
+        </label>
+        <label>
+          <span>ContraseÃ±a</span>
+          <input id="loginPassword" type="password" placeholder="Ingresa tu contraseÃ±a" autocomplete="current-password">
+        </label>
+        <p id="loginError" class="login-error" hidden>Correo o contraseÃ±a incorrectos.</p>
+        <button id="loginBtn" class="primary-btn login-btn" type="submit">Ingresar</button>
+      </form>
+    </div>
+  </section>
+
+  <div id="mainApp" class="app-shell" hidden>
     <header class="hero">
       <div>
         <p class="eyebrow">Prorrateo Samboro</p>

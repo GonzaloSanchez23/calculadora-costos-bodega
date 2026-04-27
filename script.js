@@ -249,6 +249,19 @@ const clearSavedBtn = document.getElementById("clearSavedBtn");
 const addProductBtn = document.getElementById("addProductBtn");
 const clearProductBtn = document.getElementById("clearProductBtn");
 const FLOW_SAVE_URL = "https://7e55d88804bae045b253b2537135e3.0d.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/9050380bc99f45b5a5ff8cae21634782/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bE6ktvvRmH3dT6YafXddAfXBL-qXEEE5ELYHQQCOH0Y";
+const AUTH_STORAGE_KEY = "samboro-prorrateo-session";
+const AUTH_USERS = [
+  { email: "izcoatlsanchez@outlook.com", password: "1234Izco" },
+  { email: "gonzalo.sanchez@londoncg.com", password: "GonzaloProrrateo1234" },
+  { email: "powerbi@samborogt.onmicrosoft.com", password: "PowerBIProrarteo1234" }
+];
+
+const loginScreen = document.getElementById("loginScreen");
+const mainApp = document.getElementById("mainApp");
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginError = document.getElementById("loginError");
 
 const state = {
   products: [],
@@ -258,6 +271,42 @@ const state = {
 function toNumber(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
+function isAuthenticated() {
+  return sessionStorage.getItem(AUTH_STORAGE_KEY) === "authenticated";
+}
+
+function showMainApp() {
+  loginScreen.hidden = true;
+  mainApp.hidden = false;
+}
+
+function showLogin() {
+  loginScreen.hidden = false;
+  mainApp.hidden = true;
+}
+
+function handleLogin(event) {
+  event.preventDefault();
+
+  const email = normalizeEmail(loginEmail.value);
+  const password = loginPassword.value;
+  const user = AUTH_USERS.find((item) => normalizeEmail(item.email) === email && item.password === password);
+
+  if (!user) {
+    loginError.hidden = false;
+    loginPassword.value = "";
+    return;
+  }
+
+  sessionStorage.setItem(AUTH_STORAGE_KEY, "authenticated");
+  loginError.hidden = true;
+  showMainApp();
 }
 
 function formatGTQ(value) {
@@ -1016,9 +1065,16 @@ clearProductBtn.addEventListener("click", clearProductForm);
 saveQuoteBtn.addEventListener("click", saveQuote);
 resetBtn.addEventListener("click", resetAll);
 clearSavedBtn.addEventListener("click", clearAllSavedQuotes);
+loginForm.addEventListener("submit", handleLogin);
 
 populateSupplierOptions();
 populateOriginPorts("");
 syncEntryPort();
 renderSummary();
 renderSavedQuotes();
+
+if (isAuthenticated()) {
+  showMainApp();
+} else {
+  showLogin();
+}
