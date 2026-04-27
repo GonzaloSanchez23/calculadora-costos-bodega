@@ -20,11 +20,18 @@
       <form id="loginForm" class="login-form">
         <label>
           <span>Correo</span>
-          <input id="loginEmail" type="email" placeholder="nombre@empresa.com" autocomplete="username">
+          <div class="input-icon-wrap">
+            <span class="input-icon" aria-hidden="true">✉</span>
+            <input id="loginEmail" type="email" placeholder="nombre@empresa.com" autocomplete="username">
+          </div>
         </label>
         <label>
           <span>ContraseÃ±a</span>
-          <input id="loginPassword" type="password" placeholder="Ingresa tu contraseÃ±a" autocomplete="current-password">
+          <div class="input-icon-wrap password-wrap">
+            <span class="input-icon" aria-hidden="true">🔒</span>
+            <input id="loginPassword" type="password" placeholder="Ingresa tu contraseÃ±a" autocomplete="current-password">
+            <button id="togglePasswordBtn" class="toggle-password-btn" type="button" aria-label="Mostrar contraseÃ±a">👁</button>
+          </div>
         </label>
         <p id="loginError" class="login-error" hidden>Correo o contraseÃ±a incorrectos.</p>
         <button id="loginBtn" class="primary-btn login-btn" type="submit">Ingresar</button>

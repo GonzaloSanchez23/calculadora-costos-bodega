@@ -262,6 +262,7 @@ const loginForm = document.getElementById("loginForm");
 const loginEmail = document.getElementById("loginEmail");
 const loginPassword = document.getElementById("loginPassword");
 const loginError = document.getElementById("loginError");
+const togglePasswordBtn = document.getElementById("togglePasswordBtn");
 
 const state = {
   products: [],
@@ -307,6 +308,16 @@ function handleLogin(event) {
   sessionStorage.setItem(AUTH_STORAGE_KEY, "authenticated");
   loginError.hidden = true;
   showMainApp();
+}
+
+function togglePasswordVisibility() {
+  const isPassword = loginPassword.type === "password";
+  loginPassword.type = isPassword ? "text" : "password";
+  togglePasswordBtn.textContent = isPassword ? "🙈" : "👁";
+  togglePasswordBtn.setAttribute(
+    "aria-label",
+    isPassword ? "Ocultar contraseÃ±a" : "Mostrar contraseÃ±a"
+  );
 }
 
 function formatGTQ(value) {
@@ -1066,6 +1077,7 @@ saveQuoteBtn.addEventListener("click", saveQuote);
 resetBtn.addEventListener("click", resetAll);
 clearSavedBtn.addEventListener("click", clearAllSavedQuotes);
 loginForm.addEventListener("submit", handleLogin);
+togglePasswordBtn.addEventListener("click", togglePasswordVisibility);
 
 populateSupplierOptions();
 populateOriginPorts("");

@@ -54,6 +54,45 @@ body {
   gap: 16px;
 }
 
+.input-icon-wrap {
+  position: relative;
+}
+
+.input-icon-wrap input {
+  padding-left: 46px;
+}
+
+.password-wrap input {
+  padding-right: 52px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  font-size: 1rem;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+}
+
+.toggle-password-btn:hover {
+  color: var(--text);
+}
+
 .login-btn {
   margin-top: 4px;
   width: 100%;
