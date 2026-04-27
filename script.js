@@ -250,6 +250,7 @@ const addProductBtn = document.getElementById("addProductBtn");
 const clearProductBtn = document.getElementById("clearProductBtn");
 const FLOW_SAVE_URL = "https://7e55d88804bae045b253b2537135e3.0d.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/9050380bc99f45b5a5ff8cae21634782/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bE6ktvvRmH3dT6YafXddAfXBL-qXEEE5ELYHQQCOH0Y";
 const AUTH_STORAGE_KEY = "samboro-prorrateo-session";
+const AUTH_USER_EMAIL_KEY = "samboro-prorrateo-user-email";
 const AUTH_USERS = [
   { email: "izcoatlsanchez@outlook.com", password: "1234Izco" },
   { email: "gonzalo.sanchez@londoncg.com", password: "GonzaloProrrateo1234" },
@@ -282,6 +283,10 @@ function isAuthenticated() {
   return sessionStorage.getItem(AUTH_STORAGE_KEY) === "authenticated";
 }
 
+function getAuthenticatedUserEmail() {
+  return sessionStorage.getItem(AUTH_USER_EMAIL_KEY) || "";
+}
+
 function showMainApp() {
   loginScreen.hidden = true;
   mainApp.hidden = false;
@@ -306,6 +311,7 @@ function handleLogin(event) {
   }
 
   sessionStorage.setItem(AUTH_STORAGE_KEY, "authenticated");
+  sessionStorage.setItem(AUTH_USER_EMAIL_KEY, user.email);
   loginError.hidden = true;
   showMainApp();
 }
@@ -334,6 +340,19 @@ function formatPercent(value) {
 
 function padNumber(value, length) {
   return String(value).padStart(length, "0");
+}
+
+function seededNumberFromText(text, min, max, decimals = 2) {
+  const normalized = String(text || "seed");
+  let hash = 0;
+
+  for (let index = 0; index < normalized.length; index += 1) {
+    hash = (hash * 31 + normalized.charCodeAt(index)) >>> 0;
+  }
+
+  const ratio = hash / 4294967295;
+  const value = min + (max - min) * ratio;
+  return Number(value.toFixed(decimals));
 }
 
 function createContainerFolio() {
@@ -383,6 +402,42 @@ function populateSupplierOptions() {
 
 function getSupplierConfig(supplierName) {
   return supplierCatalog.find((supplier) => supplier.supplierName === supplierName) || null;
+}
+
+function getSupplierDependentDefaults(supplier) {
+  const seedBase = `${supplier.supplierName}-${supplier.containerSize}-${supplier.transportType}`;
+  const isTerrestrial = supplier.transportType === "Terrestre";
+  const isEuropean = supplier.originCountry === "España" || supplier.originCountry === "Italia";
+  const defaultWarehouseCity = supplier.destinationPort.includes("Tecun Uman")
+    ? "Quetzaltenango"
+    : "Ciudad de Guatemala";
+  const defaultFinalDestination = supplier.destinationPort.includes("Tecun Uman")
+    ? "Centro de distribución occidente"
+    : "Bodega central Samboro";
+  const defaultInternationalFreight = isTerrestrial
+    ? seededNumberFromText(`${seedBase}-intl`, 180, 650)
+    : seededNumberFromText(`${seedBase}-intl`, isEuropean ? 1450 : 2100, isEuropean ? 2900 : 4600);
+  const defaultInsurance = seededNumberFromText(`${seedBase}-ins`, 25, 130);
+  const defaultCustomsFees = seededNumberFromText(`${seedBase}-customs`, 1250, 3200);
+  const defaultDocumentFees = seededNumberFromText(`${seedBase}-docs`, 180, 780);
+  const defaultExtraFees = seededNumberFromText(`${seedBase}-extra`, 125, 960);
+  const defaultWarehouseCost = seededNumberFromText(`${seedBase}-warehouse`, 220, 1450);
+  const defaultLocalFreight = seededNumberFromText(`${seedBase}-localfreight`, 780, 2850);
+  const defaultHandling = seededNumberFromText(`${seedBase}-handling`, 175, 980);
+
+  return {
+    warehouseLocation: defaultWarehouseCity,
+    finalDestination: defaultFinalDestination,
+    internationalFreight: defaultInternationalFreight,
+    insuranceCost: defaultInsurance,
+    entryPort: supplier.destinationPort,
+    customsFees: defaultCustomsFees,
+    documentFees: defaultDocumentFees,
+    extraFees: defaultExtraFees,
+    warehouseCost: defaultWarehouseCost,
+    localFreight: defaultLocalFreight,
+    handlingCost: defaultHandling
+  };
 }
 
 function getGeneralData() {
@@ -718,6 +773,8 @@ function applySupplierDefaults() {
     return;
   }
 
+  const defaults = getSupplierDependentDefaults(supplier);
+
   ensureContainerFolio();
   ensureSelectOption(els.originCountry, supplier.originCountry);
   els.currency.value = supplier.currency;
@@ -733,9 +790,19 @@ function applySupplierDefaults() {
   els.entryPort.value = supplier.destinationPort;
   els.containerSize.value = supplier.containerSize;
   els.transportType.value = supplier.transportType;
+  els.warehouseLocation.value = defaults.warehouseLocation;
+  els.finalDestination.value = defaults.finalDestination;
   els.exportCost.value = String(supplier.exportCost);
   els.internalFreight.value = String(supplier.internalFreight);
+  els.internationalFreight.value = String(defaults.internationalFreight);
+  els.insuranceCost.value = String(defaults.insuranceCost);
   els.daiRate.value = String(supplier.daiRate);
+  els.customsFees.value = String(defaults.customsFees);
+  els.documentFees.value = String(defaults.documentFees);
+  els.extraFees.value = String(defaults.extraFees);
+  els.warehouseCost.value = String(defaults.warehouseCost);
+  els.localFreight.value = String(defaults.localFreight);
+  els.handlingCost.value = String(defaults.handlingCost);
 
   const mappedCategory = familyToCategoryMap[supplier.family];
   if (mappedCategory) {
@@ -905,19 +972,137 @@ function getQuotePayload() {
   };
 }
 
-async function saveQuote() {
-  const payload = {
-    id: crypto.randomUUID(),
-    containerFolio: ensureContainerFolio(),
-    savedAt: Date.now(),
-    generalData: {
-      quoteName: els.quoteName.value || "",
-      importCode: els.importCode.value || "",
-      supplierName: els.supplierName.value || ""
-    }
-  };
+function buildSharePointRecordsFromQuote(quote) {
+  const savedAtIso = new Date(quote.savedAt).toISOString();
+  const userEmail = getAuthenticatedUserEmail();
+  const remainingCapacity = Math.max(1 - (quote.calculations.totalOccupancy || 0), 0);
 
-  if (!payload.generalData.quoteName.trim()) {
+  return quote.sharePointLineItems.map((lineItem) => ({
+    Title: lineItem.title,
+    QuoteName: quote.generalData.quoteName || "",
+    ContainerFolio: quote.containerFolio,
+    ImportCode: quote.generalData.importCode || "",
+    SupplierName: quote.generalData.supplierName || "",
+    SavedAt: savedAtIso,
+    UserEmail: userEmail,
+    PayloadJSON: JSON.stringify(quote),
+    WarehouseCity: quote.generalData.warehouseLocation || "",
+    FinalDestination: quote.generalData.finalDestination || "",
+    Currency: quote.generalData.currency || "",
+    ExchangeRateGTQ: toNumber(quote.generalData.exchangeRate),
+    Incoterm: quote.generalData.incoterm || "",
+    TransportType: quote.generalData.transportType || "",
+    OriginCountry: quote.generalData.originCountry || "",
+    OriginPort: quote.generalData.originPort || "",
+    DestinationPort: quote.generalData.destinationPort || "",
+    ContainerSize: quote.generalData.containerSize || "",
+    NombreCotizacion: quote.generalData.quoteName || "",
+    CodigoImportacion: quote.generalData.importCode || "",
+    BodegaCiudadGuatemala: quote.generalData.warehouseLocation || "",
+    DestinoFinal: quote.generalData.finalDestination || "",
+    Proveedor: quote.generalData.supplierName || "",
+    Moneda: quote.generalData.currency || "",
+    TipoCambioGTQ: toNumber(quote.generalData.exchangeRate),
+    Incoterms: quote.generalData.incoterm || "",
+    TipoTransporte: quote.generalData.transportType || "",
+    PaisOrigen: quote.generalData.originCountry || "",
+    PuertoOrigen: quote.generalData.originPort || "",
+    PuertoDestino: quote.generalData.destinationPort || "",
+    TamanoContenedor: quote.generalData.containerSize || "",
+    CostoExportacion: toNumber(quote.generalData.exportCost),
+    FleteInternoOrigen: toNumber(quote.generalData.internalFreight),
+    FleteInternacional: toNumber(quote.generalData.internationalFreight),
+    SeguroInternacional: toNumber(quote.generalData.insuranceCost),
+    PuertoIngreso: quote.generalData.entryPort || "",
+    PorcentajeDAI: toNumber(quote.generalData.daiRate),
+    HonorariosAduanales: toNumber(quote.generalData.customsFees),
+    GastosDocumentos: toNumber(quote.generalData.documentFees),
+    GastosExtras: toNumber(quote.generalData.extraFees),
+    CostoBodegaAlmacenaje: toNumber(quote.generalData.warehouseCost),
+    TransporteLocalDestino: toNumber(quote.generalData.localFreight),
+    ManipulacionDescarga: toNumber(quote.generalData.handlingCost),
+    ProductosEnContenedor: quote.products.length,
+    CostoProducto: quote.calculations.totalBaseGTQ || 0,
+    SubtotalCIFEstimado: quote.calculations.totalCIFGTQ || 0,
+    DAI: quote.calculations.totalDAIGTQ || 0,
+    GastosLocales: quote.calculations.localChargesGTQ || 0,
+    CostoTotalEnBodega: quote.calculations.totalLandedGTQ || 0,
+    PrecioSugeridoPromedio: quote.calculations.suggestedAverageGTQ || 0,
+    FolioContenedor: quote.containerFolio,
+    OcupacionUsada: quote.calculations.totalOccupancy || 0,
+    CapacidadRestante: remainingCapacity,
+    ProveedorControl: quote.generalData.supplierName || "",
+    TransporteControl: quote.generalData.transportType || "",
+    EstadoCotizacion: "Guardada",
+    FechaGuardado: savedAtIso,
+    UsuarioCreador: userEmail,
+    UltimaActualizacion: savedAtIso,
+    lineNumber: lineItem.lineNumber,
+    productName: lineItem.productName || "",
+    category: lineItem.category || "",
+    format: lineItem.format || "",
+    body: lineItem.body || "",
+    finish: lineItem.finish || "",
+    edge: lineItem.edge || "",
+    thickness: lineItem.thickness || "",
+    quality: lineItem.quality || "",
+    unitMeasure: lineItem.unitMeasure || "",
+    quantity: toNumber(lineItem.quantity),
+    unitCostForeign: toNumber(lineItem.unitCostForeign),
+    packagingCostForeign: toNumber(lineItem.packagingCostForeign),
+    occupancyRatio: toNumber(lineItem.occupancyRatio),
+    occupancyPercent: toNumber(lineItem.occupancyPercent),
+    productValueGTQ: toNumber(lineItem.productValueGTQ),
+    packagingGTQ: toNumber(lineItem.packagingGTQ),
+    sharedInternationalGTQ: toNumber(lineItem.sharedInternationalGTQ),
+    cifGTQ: toNumber(lineItem.cifGTQ),
+    daiGTQ: toNumber(lineItem.daiGTQ),
+    localShareGTQ: toNumber(lineItem.localShareGTQ),
+    landedGTQ: toNumber(lineItem.landedGTQ),
+    landedPerUnitGTQ: toNumber(lineItem.landedPerUnitGTQ),
+    suggestedPerUnitGTQ: toNumber(lineItem.suggestedPerUnitGTQ),
+    marginRate: toNumber(lineItem.marginRate),
+    notes: lineItem.notes || ""
+  }));
+}
+
+async function sendRecordToFlow(record) {
+  const response = await fetch(FLOW_SAVE_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(record)
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+}
+
+async function saveQuote() {
+  if (!state.products.length) {
+    const draft = getProductDraft();
+    if (draft.productName.trim() && toNumber(draft.quantity) > 0) {
+      const shouldAdd = window.confirm(
+        "Tienes un producto capturado pero aun no agregado. ¿Deseas agregarlo antes de guardar la cotización?"
+      );
+
+      if (shouldAdd) {
+        addProductToContainer();
+      }
+    }
+  }
+
+  if (!state.products.length) {
+    window.alert("Agrega al menos un producto al contenedor antes de guardar la cotización.");
+    return;
+  }
+
+  const quote = getQuotePayload();
+  const records = buildSharePointRecordsFromQuote(quote);
+
+  if (!quote.generalData.quoteName.trim()) {
     window.alert("Ingresa al menos el nombre de la cotización.");
     return;
   }
@@ -926,22 +1111,16 @@ async function saveQuote() {
     saveQuoteBtn.disabled = true;
     saveQuoteBtn.textContent = "Guardando...";
 
-    const response = await fetch(FLOW_SAVE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    for (const record of records) {
+      await sendRecordToFlow(record);
     }
 
-    window.alert("Solicitud enviada correctamente. Revisa SharePoint y el historial del flujo.");
+    window.alert(
+      `Cotización enviada correctamente. Se guardaron ${records.length} registro(s) en SharePoint para el folio ${quote.containerFolio}.`
+    );
   } catch (error) {
     console.error("Error al guardar en Power Automate:", error);
-    window.alert("Error al guardar. Revisa la URL del flujo y la ejecución en Power Automate.");
+    window.alert("Error al guardar. Revisa la URL del flujo, el historial del Flow y el mapeo de columnas en SharePoint.");
   } finally {
     saveQuoteBtn.disabled = false;
     saveQuoteBtn.textContent = "Guardar cotización";
