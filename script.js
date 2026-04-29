@@ -467,6 +467,7 @@ const AUTH_USER_EMAIL_KEY = "samboro-prorrateo-user-email";
 const AUTH_USERS = [
   { email: "izcoatlsanchez@outlook.com", password: "1234Izco" },
   { email: "gonzalo.sanchez@londoncg.com", password: "GonzaloProrrateo1234" },
+  { email: "spaz@samboro.com", password: "DISEMALO1231" },
   { email: "powerbi@samborogt.onmicrosoft.com", password: "PowerBIProrarteo1234" }
 ];
 
