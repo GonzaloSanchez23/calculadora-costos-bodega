@@ -468,6 +468,10 @@ const AUTH_USERS = [
   { email: "izcoatlsanchez@outlook.com", password: "1234Izco" },
   { email: "gonzalo.sanchez@londoncg.com", password: "GonzaloProrrateo1234" },
   { email: "spaz@samboro.com", password: "DISEMALO1231" },
+  { email: "msalazar@samboro.com", password: "MS?$&SamCostos1745" },
+  { email: "ssmith@samboro.com", password: "SS#%£LandCost6718 " },
+  { email: "mcartagena@samboro.com", password: "MC&$?Costos2429Sam" },
+  { email: "spaz@samboro.com", password: "DISEMALO1231" },
   { email: "powerbi@samborogt.onmicrosoft.com", password: "PowerBIProrarteo1234" }
 ];
 
