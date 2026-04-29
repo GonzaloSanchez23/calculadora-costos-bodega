@@ -97,6 +97,219 @@ const familyToCategoryMap = {
   "GRANITO": "Grandes formatos"
 };
 
+const supplierDefaultGroups = {
+  espanaCentro: {
+    warehouseLocation: "CENTRO LOGISTICO",
+    finalDestination: "CENTRO LOGISTICO",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 1573.53,
+    extraFees: 461.9,
+    warehouseCost: 0,
+    localFreight: 7025,
+    handlingCost: 0
+  },
+  espanaZona07: {
+    warehouseLocation: "BODEGA ZONA 07",
+    finalDestination: "BODEGA ZONA 07",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 1573.53,
+    extraFees: 461.9,
+    warehouseCost: 0,
+    localFreight: 7025,
+    handlingCost: 0
+  },
+  espanaZona17: {
+    warehouseLocation: "BODEGA ZONA 17",
+    finalDestination: "BODEGA ZONA 17",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 1573.53,
+    extraFees: 461.9,
+    warehouseCost: 0,
+    localFreight: 7025,
+    handlingCost: 0
+  },
+  chinaCentro: {
+    warehouseLocation: "CENTRO LOGISTICO",
+    finalDestination: "CENTRO LOGISTICO",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 200,
+    extraFees: 100,
+    warehouseCost: 0,
+    localFreight: 4400,
+    handlingCost: 0
+  },
+  chinaZona07Griferia: {
+    warehouseLocation: "BODEGA ZONA 07",
+    finalDestination: "BODEGA ZONA 07",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 0,
+    extraFees: 0,
+    warehouseCost: 0,
+    localFreight: 4400,
+    handlingCost: 700
+  },
+  chinaZona17: {
+    warehouseLocation: "BODEGA ZONA 17",
+    finalDestination: "BODEGA ZONA 17",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 200,
+    extraFees: 100,
+    warehouseCost: 0,
+    localFreight: 5025,
+    handlingCost: 0
+  },
+  usaZona07: {
+    warehouseLocation: "BODEGA ZONA 07",
+    finalDestination: "BODEGA ZONA 07",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 611.52,
+    extraFees: 150,
+    warehouseCost: 990,
+    localFreight: 1570,
+    handlingCost: 0
+  },
+  peruCentro: {
+    warehouseLocation: "CENTRO LOGISTICO",
+    finalDestination: "CENTRO LOGISTICO",
+    internationalFreight: 1400,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 0,
+    extraFees: 630,
+    warehouseCost: 0,
+    localFreight: 4400,
+    handlingCost: 0
+  },
+  indiaCentro: {
+    warehouseLocation: "CENTRO LOGISTICO",
+    finalDestination: "CENTRO LOGISTICO",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 200,
+    extraFees: 100,
+    warehouseCost: 0,
+    localFreight: 4400,
+    handlingCost: 0
+  },
+  mexicoCentroMapei: {
+    warehouseLocation: "CENTRO LOGISTICO",
+    finalDestination: "CENTRO LOGISTICO",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1679.75,
+    documentFees: 0,
+    extraFees: 0,
+    warehouseCost: 0,
+    localFreight: 7300,
+    handlingCost: 0
+  },
+  mexicoCentroAlpha: {
+    warehouseLocation: "CENTRO LOGISTICO",
+    finalDestination: "CENTRO LOGISTICO",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 0,
+    extraFees: 0,
+    warehouseCost: 0,
+    localFreight: 6010.2,
+    handlingCost: 643.95
+  },
+  egiptoZona17: {
+    warehouseLocation: "BODEGA ZONA 17",
+    finalDestination: "BODEGA ZONA 17",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 200,
+    extraFees: 100,
+    warehouseCost: 0,
+    localFreight: 5025,
+    handlingCost: 0
+  },
+  brasilCentro: {
+    warehouseLocation: "CENTRO LOGISTICO",
+    finalDestination: "CENTRO LOGISTICO",
+    internationalFreight: 2129.5,
+    insuranceCost: 0,
+    customsFees: 1094.8,
+    documentFees: 980,
+    extraFees: 120,
+    warehouseCost: 0,
+    localFreight: 7200,
+    handlingCost: 0
+  },
+  usaZona07Delta: {
+    warehouseLocation: "BODEGA ZONA 07",
+    finalDestination: "BODEGA ZONA 07",
+    internationalFreight: 0,
+    insuranceCost: 0,
+    customsFees: 1093.4,
+    documentFees: 611.52,
+    extraFees: 150,
+    warehouseCost: 755,
+    localFreight: 785,
+    handlingCost: 0
+  }
+};
+
+const supplierOperationalDefaults = {
+  "ARGENTA CERAMICA SL ESP": supplierDefaultGroups.espanaCentro,
+  "ECOCERAMIC SLU ESP": supplierDefaultGroups.espanaCentro,
+  "EXAGRES SA ESP": supplierDefaultGroups.espanaCentro,
+  "EUROSHRINK SA ESP": supplierDefaultGroups.espanaCentro,
+  "GLOBAL BRIDGE TRADING S.A.C PERU": supplierDefaultGroups.peruCentro,
+  "FILA CHEMICALS USA, CORP. USA": supplierDefaultGroups.usaZona07,
+  "XIAMEN ZHONGGUANSHI STONE CO., LIMITED CHINA": supplierDefaultGroups.chinaZona17,
+  "NEWARK CERAMIC INDIA": supplierDefaultGroups.indiaCentro,
+  "TAIZHOU XUBO WATER CHINA": supplierDefaultGroups.chinaZona07Griferia,
+  "OVERSEAS MERCHANT INTERNATIONAL CHINA": supplierDefaultGroups.chinaZona07Griferia,
+  "TAIZHOU FEIGEER IMPORT & EXPORT CHINA": supplierDefaultGroups.chinaZona07Griferia,
+  "CHAOZHOU FENGXI MEITAO CERAMICS MANUFACTORY CHINA": supplierDefaultGroups.chinaCentro,
+  "SPANISH TILE FRON NULES SAU España": supplierDefaultGroups.espanaCentro,
+  "GETTING AIMS TEAM": {
+    ...supplierDefaultGroups.espanaZona07,
+    localFreight: 7025
+  },
+  "IMA GROUP": supplierDefaultGroups.chinaCentro,
+  "WUHAN HONGYANTENG TECHNOLOGY": supplierDefaultGroups.chinaZona17,
+  "MARMO BRAND": supplierDefaultGroups.egiptoZona17,
+  "MAPEI DE México": supplierDefaultGroups.mexicoCentroMapei,
+  "GUANGDONG OVS TECHNOLOGY CO LTD": supplierDefaultGroups.chinaZona07Griferia,
+  "KAIPING JUNYUAN IMPORT AND EXPORT TRADING CO LTD": supplierDefaultGroups.chinaZona07Griferia,
+  "JOMOLA INDUSTRY (HK) CO TD": supplierDefaultGroups.chinaZona07Griferia,
+  "ALPHA CERAMICA. CATO": supplierDefaultGroups.mexicoCentroAlpha,
+  "RUBI TOOLS": supplierDefaultGroups.espanaZona07,
+  "GEOTILES": supplierDefaultGroups.espanaCentro,
+  "HALCON CERAMICAS": supplierDefaultGroups.espanaCentro,
+  "NAVARTI CERAMICA": supplierDefaultGroups.espanaCentro,
+  "PORCELANOSA": supplierDefaultGroups.espanaCentro,
+  "DILMUN EMPRESARIAL": supplierDefaultGroups.espanaCentro,
+  "COOPERATIVA CERAMICA D' IMOLA": supplierDefaultGroups.espanaCentro,
+  "MARAZZI GROUP": supplierDefaultGroups.espanaCentro,
+  "PANARIA GROUP": supplierDefaultGroups.espanaCentro,
+  "THESIZE SURFACES": supplierDefaultGroups.espanaZona17,
+  "GUANGDONG OVERLAND": supplierDefaultGroups.chinaCentro,
+  "FOSHAN YINGKANGSHUN": supplierDefaultGroups.chinaCentro,
+  "DELTA FAUCET": supplierDefaultGroups.usaZona07Delta,
+  "ROCA SANITARIOS BRASIL": supplierDefaultGroups.brasilCentro
+};
+
 const portCatalogByCountry = {
   China: [
     { name: "Shanghai", surchargeFactor: 0.19 },
@@ -424,19 +637,20 @@ function getSupplierDependentDefaults(supplier) {
   const defaultWarehouseCost = seededNumberFromText(`${seedBase}-warehouse`, 220, 1450);
   const defaultLocalFreight = seededNumberFromText(`${seedBase}-localfreight`, 780, 2850);
   const defaultHandling = seededNumberFromText(`${seedBase}-handling`, 175, 980);
+  const exactDefaults = supplierOperationalDefaults[supplier.supplierName] || {};
 
   return {
-    warehouseLocation: defaultWarehouseCity,
-    finalDestination: defaultFinalDestination,
-    internationalFreight: defaultInternationalFreight,
-    insuranceCost: defaultInsurance,
+    warehouseLocation: exactDefaults.warehouseLocation ?? defaultWarehouseCity,
+    finalDestination: exactDefaults.finalDestination ?? defaultFinalDestination,
+    internationalFreight: exactDefaults.internationalFreight ?? defaultInternationalFreight,
+    insuranceCost: exactDefaults.insuranceCost ?? defaultInsurance,
     entryPort: supplier.destinationPort,
-    customsFees: defaultCustomsFees,
-    documentFees: defaultDocumentFees,
-    extraFees: defaultExtraFees,
-    warehouseCost: defaultWarehouseCost,
-    localFreight: defaultLocalFreight,
-    handlingCost: defaultHandling
+    customsFees: exactDefaults.customsFees ?? defaultCustomsFees,
+    documentFees: exactDefaults.documentFees ?? defaultDocumentFees,
+    extraFees: exactDefaults.extraFees ?? defaultExtraFees,
+    warehouseCost: exactDefaults.warehouseCost ?? defaultWarehouseCost,
+    localFreight: exactDefaults.localFreight ?? defaultLocalFreight,
+    handlingCost: exactDefaults.handlingCost ?? defaultHandling
   };
 }
 
