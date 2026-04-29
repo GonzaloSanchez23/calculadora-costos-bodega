@@ -861,13 +861,13 @@ function updateCapacityPreview() {
   labels.capacityProgress.classList.toggle("is-danger", projectedOccupancy > 1);
 
   if (!state.products.length) {
-    labels.capacityHint.textContent = "Agrega productos hasta completar la capacidad del contenedor.";
+    labels.capacityHint.textContent = "Puedes agregar productos hasta completar la capacidad del contenedor.";
   } else if (projectedOccupancy > 1) {
-    labels.capacityHint.textContent = "Este producto supera la capacidad estimada del contenedor.";
+    labels.capacityHint.textContent = "Con este producto se supera la capacidad estimada del contenedor.";
   } else if (projectedOccupancy > 0.92) {
-    labels.capacityHint.textContent = "El contenedor esta casi lleno. Revisa si deseas cerrar la corrida.";
+    labels.capacityHint.textContent = "El contenedor esta casi lleno. Revisa la corrida.";
   } else {
-    labels.capacityHint.textContent = "Todavia puedes agregar otro producto al mismo contenedor.";
+    labels.capacityHint.textContent = "Todavía puedes agregar otro producto al mismo contenedor.";
   }
 }
 
@@ -877,7 +877,7 @@ function renderProducts() {
   labels.productCountBadge.textContent = `${state.products.length} productos`;
 
   if (!metrics.products.length) {
-    labels.productsList.innerHTML = '<p class="empty-state">Aun no hay productos agregados al contenedor.</p>';
+    labels.productsList.innerHTML = '<p class="empty-state">Aún no hay productos agregados al contenedor.</p>';
     return;
   }
 
@@ -1039,7 +1039,7 @@ function validateProductBeforeAdd() {
   }
 
   if (toNumber(product.quantity) <= 0) {
-    window.alert("La cantidad del producto debe ser mayor a cero.");
+    window.alert("La cantidad del producto debe ser mayor a 0.");
     return null;
   }
 
@@ -1048,7 +1048,7 @@ function validateProductBeforeAdd() {
     estimateProductCapacity(product, getGeneralData()).occupancyRatio;
 
   if (projectedOccupancy > 1.02) {
-    window.alert("Este producto supera la capacidad estimada del contenedor.");
+    window.alert("Con este producto se supera la capacidad estimada del contenedor.");
     return null;
   }
 
@@ -1066,7 +1066,7 @@ function addProductToContainer() {
   renderSummary();
 
   const wantsAnother = window.confirm(
-    "Producto agregado al contenedor. Deseas agregar otro producto a esta misma corrida?"
+    "Producto agregado al contenedor. ¿Deseas continuar con otro producto a esta misma corrida?"
   );
 
   clearProductForm();
@@ -1300,7 +1300,7 @@ async function saveQuote() {
     const draft = getProductDraft();
     if (draft.productName.trim() && toNumber(draft.quantity) > 0) {
       const shouldAdd = window.confirm(
-        "Tienes un producto capturado pero aun no agregado. ¿Deseas agregarlo antes de guardar la cotización?"
+        "Tienes un producto capturado pero sin agregar. ¿Deseas añadirlo antes de guardar la cotización?"
       );
 
       if (shouldAdd) {
@@ -1310,7 +1310,7 @@ async function saveQuote() {
   }
 
   if (!state.products.length) {
-    window.alert("Agrega al menos un producto al contenedor antes de guardar la cotización.");
+    window.alert("Agrega al menos 1 producto al contenedor antes de guardar la cotización.");
     return;
   }
 
@@ -1331,7 +1331,7 @@ async function saveQuote() {
     }
 
     window.alert(
-      `Cotización enviada correctamente. Se guardaron ${records.length} registro(s) en SharePoint para el folio ${quote.containerFolio}.`
+      `Cotización enviada correctamente. Se guardaron ${records.length} registro(s) para el folio ${quote.containerFolio}.`
     );
   } catch (error) {
     console.error("Error al guardar en Power Automate:", error);
@@ -1347,7 +1347,7 @@ function renderSavedQuotes() {
   labels.savedQuotes.innerHTML = "";
 
   if (!quotes.length) {
-    labels.savedQuotes.innerHTML = '<p class="empty-state">Aun no hay cotizaciones guardadas.</p>';
+    labels.savedQuotes.innerHTML = '<p class="empty-state">Aún no hay cotizaciones guardadas.</p>';
     return;
   }
 
