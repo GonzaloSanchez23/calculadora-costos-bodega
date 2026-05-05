@@ -474,6 +474,10 @@ const AUTH_USERS = [
   { email: "jpalomo@samboro.com", password: "J(palomo)454590" },
   { email: "surizar@samboro.com", password: "sadiurizar3434" },
   { email: "spaz@samboro.com", password: "DISEMALO1231" },
+  { email: "nletona@samboro.com", password: "nletona5411" },
+  { email: "ldelcid@samboro.com", password: "ldelcil2389" },
+  { email: "gjuarez@samboro.com", password: "gjuarez1750" },
+  { email: "racuna@samboro.com", password: "racuna4590" },
   { email: "powerbi@samborogt.onmicrosoft.com", password: "PowerBIProrarteo1234" }
 ];
 
