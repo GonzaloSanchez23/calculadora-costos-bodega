@@ -16,6 +16,8 @@ const generalFieldIds = [
   "internalFreight",
   "internationalFreight",
   "insuranceCost",
+  "numberOfPallets",
+  "costPerPallet",
   "entryPort",
   "daiRate",
   "customsFees",
@@ -39,12 +41,16 @@ const productFieldIds = [
   "unitCost",
   "quantity",
   "packagingCost",
+  "productDaiRate",
   "marginRate",
   "notes"
 ];
 
 const allFieldIds = [...generalFieldIds, ...productFieldIds];
 const storageKey = "gt-import-cost-quotes";
+const customSuppliersStorageKey = "gt-custom-suppliers";
+const IVA_RATE = 0.12;
+const MANUAL_SUPPLIER_VALUE = "MANUAL";
 
 const supplierCatalog = [
   { supplierName: "ARGENTA CERAMICA SL ESP", family: "PORCELANATO", originCountry: "España", currency: "EUR", incoterm: "EXW", exportCost: 47.25, internalFreight: 384.3, daiRate: 0, originPort: "Valencia, España", destinationPort: "Santo Tomas de Castilla", containerSize: "20 pies", transportType: "Maritimo" },
@@ -461,6 +467,8 @@ const resetBtn = document.getElementById("resetBtn");
 const clearSavedBtn = document.getElementById("clearSavedBtn");
 const addProductBtn = document.getElementById("addProductBtn");
 const clearProductBtn = document.getElementById("clearProductBtn");
+const customSupplierNameWrap = document.getElementById("customSupplierNameWrap");
+const customSupplierNameInput = document.getElementById("customSupplierName");
 const FLOW_SAVE_URL = "https://7e55d88804bae045b253b2537135e3.0d.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/9050380bc99f45b5a5ff8cae21634782/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bE6ktvvRmH3dT6YafXddAfXBL-qXEEE5ELYHQQCOH0Y";
 const AUTH_STORAGE_KEY = "samboro-prorrateo-session";
 const AUTH_USER_EMAIL_KEY = "samboro-prorrateo-user-email";
@@ -501,6 +509,88 @@ function toNumber(value) {
 
 function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
+}
+
+function normalizeSupplierName(name) {
+  return String(name || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+function normalizeFinishValue(value) {
+  return value === "Brillante" ? "BRILLO" : value || "";
+}
+
+function getCustomSuppliers() {
+  try {
+    return JSON.parse(localStorage.getItem(customSuppliersStorageKey) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function setCustomSuppliers(suppliers) {
+  localStorage.setItem(customSuppliersStorageKey, JSON.stringify(suppliers));
+}
+
+function getCombinedSupplierCatalog() {
+  const customSuppliers = getCustomSuppliers();
+  const uniqueSuppliers = new Map();
+
+  [...supplierCatalog, ...customSuppliers].forEach((supplier) => {
+    const normalizedName = normalizeSupplierName(supplier?.supplierName);
+    if (!normalizedName || uniqueSuppliers.has(normalizedName)) {
+      return;
+    }
+
+    uniqueSuppliers.set(normalizedName, supplier);
+  });
+
+  return Array.from(uniqueSuppliers.values());
+}
+
+function saveCustomSupplierFromForm() {
+  const typedName = String(customSupplierNameInput?.value || "").trim();
+  if (!typedName) {
+    return "";
+  }
+
+  const normalizedName = normalizeSupplierName(typedName);
+  const existingSupplier = getCombinedSupplierCatalog().find(
+    (supplier) => normalizeSupplierName(supplier.supplierName) === normalizedName
+  );
+
+  if (existingSupplier) {
+    return existingSupplier.supplierName;
+  }
+
+  const customSuppliers = getCustomSuppliers();
+  customSuppliers.push({
+    supplierName: typedName,
+    family: "",
+    originCountry: els.originCountry.value || "",
+    currency: els.currency.value || "USD",
+    incoterm: els.incoterm.value || "FOB",
+    exportCost: toNumber(els.exportCost.value),
+    internalFreight: toNumber(els.internalFreight.value),
+    daiRate: toNumber(els.productDaiRate?.value || els.daiRate.value),
+    originPort: els.originPort.value || "",
+    destinationPort: els.destinationPort.value || "",
+    containerSize: els.containerSize.value || "",
+    transportType: els.transportType.value || "Maritimo"
+  });
+  setCustomSuppliers(customSuppliers);
+  populateSupplierOptions();
+  return typedName;
+}
+
+function updateManualSupplierVisibility() {
+  const isManual = els.supplierName.value === MANUAL_SUPPLIER_VALUE;
+  customSupplierNameWrap.hidden = !isManual;
+  if (!isManual) {
+    customSupplierNameInput.value = "";
+  }
 }
 
 function isAuthenticated() {
@@ -615,23 +705,40 @@ function ensureSelectOption(selectElement, value) {
 }
 
 function populateSupplierOptions() {
-  const uniqueSuppliers = [...new Set(supplierCatalog.map((supplier) => supplier.supplierName))].sort();
+  const currentValue = els.supplierName.value;
+  els.supplierName.innerHTML = `
+    <option value="">Seleccionar proveedor</option>
+    <option value="${MANUAL_SUPPLIER_VALUE}">Otro / captura manual</option>
+  `;
+
+  const uniqueSuppliers = [...new Set(getCombinedSupplierCatalog().map((supplier) => supplier.supplierName))].sort();
   uniqueSuppliers.forEach((supplierName) => {
     const option = document.createElement("option");
     option.value = supplierName;
     option.textContent = supplierName;
     els.supplierName.appendChild(option);
   });
+
+  if (currentValue) {
+    ensureSelectOption(els.supplierName, currentValue);
+    els.supplierName.value = currentValue;
+  }
 }
 
 function getSupplierConfig(supplierName) {
-  return supplierCatalog.find((supplier) => supplier.supplierName === supplierName) || null;
+  const normalizedName = normalizeSupplierName(supplierName);
+  return getCombinedSupplierCatalog().find(
+    (supplier) => normalizeSupplierName(supplier.supplierName) === normalizedName
+  ) || null;
 }
 
 function getSupplierDependentDefaults(supplier) {
   const seedBase = `${supplier.supplierName}-${supplier.containerSize}-${supplier.transportType}`;
   const isTerrestrial = supplier.transportType === "Terrestre";
   const isEuropean = supplier.originCountry === "España" || supplier.originCountry === "Italia";
+  const isCatalogSupplier = supplierCatalog.some(
+    (catalogSupplier) => normalizeSupplierName(catalogSupplier.supplierName) === normalizeSupplierName(supplier.supplierName)
+  );
   const defaultWarehouseCity = supplier.destinationPort.includes("Tecun Uman")
     ? "Quetzaltenango"
     : "Ciudad de Guatemala";
@@ -650,6 +757,22 @@ function getSupplierDependentDefaults(supplier) {
   const defaultHandling = seededNumberFromText(`${seedBase}-handling`, 175, 980);
   const exactDefaults = supplierOperationalDefaults[supplier.supplierName] || {};
 
+  if (!isCatalogSupplier && !Object.keys(exactDefaults).length) {
+    return {
+      warehouseLocation: "",
+      finalDestination: "",
+      internationalFreight: 0,
+      insuranceCost: 0,
+      entryPort: supplier.destinationPort || "",
+      customsFees: 0,
+      documentFees: 0,
+      extraFees: 0,
+      warehouseCost: 0,
+      localFreight: 0,
+      handlingCost: 0
+    };
+  }
+
   return {
     warehouseLocation: exactDefaults.warehouseLocation ?? defaultWarehouseCity,
     finalDestination: exactDefaults.finalDestination ?? defaultFinalDestination,
@@ -666,11 +789,17 @@ function getSupplierDependentDefaults(supplier) {
 }
 
 function getGeneralData() {
-  return Object.fromEntries(generalFieldIds.map((id) => [id, els[id].value]));
+  const generalData = Object.fromEntries(generalFieldIds.map((id) => [id, els[id].value]));
+  if (generalData.supplierName === MANUAL_SUPPLIER_VALUE) {
+    generalData.supplierName = String(customSupplierNameInput.value || "").trim();
+  }
+  return generalData;
 }
 
 function getProductDraft() {
-  return Object.fromEntries(productFieldIds.map((id) => [id, els[id].value]));
+  const product = Object.fromEntries(productFieldIds.map((id) => [id, els[id].value]));
+  product.finish = normalizeFinishValue(product.finish);
+  return product;
 }
 
 function parseThicknessMeters(thickness) {
@@ -774,7 +903,6 @@ function getDraftProductMetrics() {
 
 function getContainerMetrics(products, generalData) {
   const exchangeRate = toNumber(generalData.exchangeRate) || 1;
-  const daiRate = toNumber(generalData.daiRate) / 100;
   const localChargesGTQ =
     toNumber(generalData.customsFees) +
     toNumber(generalData.documentFees) +
@@ -782,6 +910,7 @@ function getContainerMetrics(products, generalData) {
     toNumber(generalData.warehouseCost) +
     toNumber(generalData.localFreight) +
     toNumber(generalData.handlingCost);
+  const totalPalletsCost = toNumber(generalData.numberOfPallets) * toNumber(generalData.costPerPallet);
 
   const productsWithMetrics = products.map((product) => {
     const capacity = estimateProductCapacity(product, generalData);
@@ -790,37 +919,52 @@ function getContainerMetrics(products, generalData) {
     const packagingGTQ = toNumber(product.packagingCost) * exchangeRate;
     const baseGTQ = productValueGTQ + packagingGTQ;
     const marginRate = toNumber(product.marginRate) / 100;
+    const productDaiRate = toNumber(product.productDaiRate) / 100;
 
     return {
       ...product,
+      finish: normalizeFinishValue(product.finish),
       capacity,
       productValueGTQ,
       packagingGTQ,
       baseGTQ,
-      marginRate
+      marginRate,
+      productDaiRate
     };
   });
 
   const totalOccupancy = productsWithMetrics.reduce((sum, product) => sum + product.capacity.occupancyRatio, 0);
   const totalBaseGTQ = productsWithMetrics.reduce((sum, product) => sum + product.baseGTQ, 0);
+  const totalFobGTQ =
+    totalBaseGTQ +
+    (toNumber(generalData.exportCost) + toNumber(generalData.internalFreight)) * exchangeRate;
+  const insuranceCostGTQ = totalFobGTQ * 0.0065;
+  const insuranceCostForeign = exchangeRate > 0 ? insuranceCostGTQ / exchangeRate : insuranceCostGTQ;
   const totalLogisticsGTQ =
     (toNumber(generalData.exportCost) +
       toNumber(generalData.internalFreight) +
-      toNumber(generalData.internationalFreight) +
-      toNumber(generalData.insuranceCost)) * exchangeRate;
+      toNumber(generalData.internationalFreight)) * exchangeRate;
   const routeAdjustmentGTQ = getRouteAdjustmentGTQ(generalData, totalOccupancy);
   const occupancyBase = totalOccupancy > 0 ? totalOccupancy : 1;
 
   const detailedProducts = productsWithMetrics.map((product, index) => {
     const occupancyShare = product.capacity.occupancyRatio / occupancyBase;
-    const sharedInternationalGTQ = (totalLogisticsGTQ + routeAdjustmentGTQ) * occupancyShare;
+    const sharedInternationalGTQ =
+      (totalLogisticsGTQ + insuranceCostGTQ + totalPalletsCost + routeAdjustmentGTQ) * occupancyShare;
     const cifGTQ = product.baseGTQ + sharedInternationalGTQ;
-    const daiGTQ = cifGTQ * daiRate;
+    const daiGTQ = cifGTQ * product.productDaiRate;
     const localShareGTQ = localChargesGTQ * occupancyShare;
     const landedGTQ = cifGTQ + daiGTQ + localShareGTQ;
     const quantity = Math.max(toNumber(product.quantity), 1);
     const landedPerUnitGTQ = landedGTQ / quantity;
-    const suggestedPerUnitGTQ = landedPerUnitGTQ * (1 + product.marginRate);
+    const costWithIvaGTQ = landedPerUnitGTQ * (1 + IVA_RATE);
+    const marginBase = 1 - product.marginRate;
+    const suggestedPerUnitGTQ =
+      product.marginRate <= 0
+        ? costWithIvaGTQ
+        : marginBase <= 0
+          ? 0
+          : costWithIvaGTQ / marginBase;
 
     return {
       ...product,
@@ -832,6 +976,7 @@ function getContainerMetrics(products, generalData) {
       localShareGTQ,
       landedGTQ,
       landedPerUnitGTQ,
+      costWithIvaGTQ,
       suggestedPerUnitGTQ
     };
   });
@@ -849,6 +994,10 @@ function getContainerMetrics(products, generalData) {
     totalOccupancy,
     totalBaseGTQ,
     totalLogisticsGTQ,
+    totalFobGTQ,
+    insuranceCostGTQ,
+    insuranceCostForeign,
+    totalPalletsCost,
     routeAdjustmentGTQ,
     totalCIFGTQ,
     totalDAIGTQ,
@@ -873,7 +1022,7 @@ function updateCapacityPreview() {
   if (!state.products.length) {
     labels.capacityHint.textContent = "Puedes agregar productos hasta completar la capacidad del contenedor.";
   } else if (projectedOccupancy > 1) {
-    labels.capacityHint.textContent = "Con este producto se supera la capacidad estimada del contenedor.";
+    labels.capacityHint.textContent = "Has superado la capacidad recomendada del contenedor, pero puedes continuar.";
   } else if (projectedOccupancy > 0.92) {
     labels.capacityHint.textContent = "El contenedor esta casi lleno. Revisa la corrida.";
   } else {
@@ -925,6 +1074,7 @@ function renderProducts() {
 function renderSummary() {
   const generalData = getGeneralData();
   const metrics = getContainerMetrics(state.products, generalData);
+  els.insuranceCost.value = metrics.insuranceCostForeign.toFixed(2);
 
   labels.productCount.textContent = String(state.products.length);
   labels.productTotal.textContent = formatGTQ(metrics.totalBaseGTQ);
@@ -938,6 +1088,7 @@ function renderSummary() {
   labels.quickTransport.textContent = generalData.transportType || "-";
   labels.usedCapacitySummary.textContent = formatPercent(metrics.totalOccupancy);
   labels.remainingCapacitySummary.textContent = formatPercent(Math.max(1 - metrics.totalOccupancy, 0));
+  updateManualSupplierVisibility();
 
   renderProducts();
   updateCapacityPreview();
@@ -960,12 +1111,14 @@ function clearProductForm() {
   });
 
   els.marginRate.value = "25";
+  const currentSupplier = getSupplierConfig(els.supplierName.value);
+  els.productDaiRate.value = currentSupplier ? String(currentSupplier.daiRate ?? 0) : "0";
   renderSummary();
 }
 
 function populateOriginPorts(country, selectedPort = "") {
   const catalogPorts = portCatalogByCountry[country] || [];
-  const supplierPorts = supplierCatalog
+  const supplierPorts = getCombinedSupplierCatalog()
     .filter((supplier) => supplier.originCountry === country)
     .map((supplier) => supplier.originPort);
   const ports = [
@@ -993,7 +1146,8 @@ function populateOriginPorts(country, selectedPort = "") {
 
 function applySupplierDefaults() {
   const supplier = getSupplierConfig(els.supplierName.value);
-  if (!supplier || els.supplierName.value === "MANUAL") {
+  updateManualSupplierVisibility();
+  if (!supplier || els.supplierName.value === MANUAL_SUPPLIER_VALUE) {
     renderSummary();
     return;
   }
@@ -1020,8 +1174,9 @@ function applySupplierDefaults() {
   els.exportCost.value = String(supplier.exportCost);
   els.internalFreight.value = String(supplier.internalFreight);
   els.internationalFreight.value = String(defaults.internationalFreight);
-  els.insuranceCost.value = String(defaults.insuranceCost);
+  els.insuranceCost.value = "0";
   els.daiRate.value = String(supplier.daiRate);
+  els.productDaiRate.value = String(supplier.daiRate);
   els.customsFees.value = String(defaults.customsFees);
   els.documentFees.value = String(defaults.documentFees);
   els.extraFees.value = String(defaults.extraFees);
@@ -1057,23 +1212,26 @@ function validateProductBeforeAdd() {
     getContainerMetrics(state.products, getGeneralData()).totalOccupancy +
     estimateProductCapacity(product, getGeneralData()).occupancyRatio;
 
-  if (projectedOccupancy > 1.02) {
-    window.alert("Con este producto se supera la capacidad estimada del contenedor.");
-    return null;
-  }
-
-  return product;
+  return {
+    product,
+    exceedsCapacity: projectedOccupancy > 1.02
+  };
 }
 
 function addProductToContainer() {
-  const product = validateProductBeforeAdd();
-  if (!product) {
+  const validation = validateProductBeforeAdd();
+  if (!validation) {
     return;
   }
+  const { product, exceedsCapacity } = validation;
 
   ensureContainerFolio();
   state.products.push(product);
   renderSummary();
+
+  if (exceedsCapacity) {
+    window.alert("Has superado la capacidad recomendada del contenedor, pero puedes continuar.");
+  }
 
   const wantsAnother = window.confirm(
     "Producto agregado al contenedor. ¿Deseas continuar con otro producto a esta misma corrida?"
@@ -1101,8 +1259,22 @@ function getSavedQuotes() {
 
 function normalizeSavedQuote(quote) {
   if (quote.generalData && Array.isArray(quote.products)) {
+    const normalizedGeneralData = {
+      ...quote.generalData,
+      supplierName: quote.generalData.supplierName || "",
+      numberOfPallets: quote.generalData.numberOfPallets ?? "0",
+      costPerPallet: quote.generalData.costPerPallet ?? "0",
+      insuranceCost: quote.generalData.insuranceCost ?? "0"
+    };
+    const normalizedProducts = quote.products.map((product) => ({
+      ...product,
+      finish: normalizeFinishValue(product.finish),
+      productDaiRate: product.productDaiRate ?? product.daiRate ?? "0"
+    }));
     return {
       ...quote,
+      generalData: normalizedGeneralData,
+      products: normalizedProducts,
       containerFolio: quote.containerFolio || createContainerFolio(),
       sharePointLineItems: quote.sharePointLineItems || []
     };
@@ -1115,7 +1287,19 @@ function normalizeSavedQuote(quote) {
     generalData: quote.data || {},
     products: quote.data
       ? [
-          Object.fromEntries(productFieldIds.map((fieldId) => [fieldId, quote.data[fieldId] ?? ""]))
+          Object.fromEntries(
+            productFieldIds.map((fieldId) => {
+              if (fieldId === "finish") {
+                return [fieldId, normalizeFinishValue(quote.data[fieldId])];
+              }
+
+              if (fieldId === "productDaiRate") {
+                return [fieldId, quote.data[fieldId] ?? quote.data.daiRate ?? "0"];
+              }
+
+              return [fieldId, quote.data[fieldId] ?? ""];
+            })
+          )
         ]
       : [],
     calculations: quote.calculations || {},
@@ -1150,7 +1334,7 @@ function buildSharePointLineItems(payload) {
     category: product.category || "",
     format: product.format || "",
     body: product.body || "",
-    finish: product.finish || "",
+    finish: normalizeFinishValue(product.finish),
     edge: product.edge || "",
     thickness: product.thickness || "",
     quality: product.quality || "",
@@ -1158,6 +1342,7 @@ function buildSharePointLineItems(payload) {
     quantity: toNumber(product.quantity),
     unitCostForeign: toNumber(product.unitCost),
     packagingCostForeign: toNumber(product.packagingCost),
+    productDaiRate: toNumber(product.productDaiRate) * 100,
     occupancyRatio: product.capacity?.occupancyRatio || 0,
     occupancyPercent: (product.capacity?.occupancyRatio || 0) * 100,
     productValueGTQ: product.productValueGTQ || 0,
@@ -1168,8 +1353,12 @@ function buildSharePointLineItems(payload) {
     localShareGTQ: product.localShareGTQ || 0,
     landedGTQ: product.landedGTQ || 0,
     landedPerUnitGTQ: product.landedPerUnitGTQ || 0,
+    costWithIvaGTQ: product.costWithIvaGTQ || 0,
     suggestedPerUnitGTQ: product.suggestedPerUnitGTQ || 0,
     marginRate: toNumber(product.marginRate) * 100,
+    numberOfPallets: toNumber(payload.generalData.numberOfPallets),
+    costPerPallet: toNumber(payload.generalData.costPerPallet),
+    totalPalletsCost: payload.totalPalletsCost || 0,
     notes: product.notes || "",
     savedAt: payload.savedAt
   }));
@@ -1192,7 +1381,8 @@ function getQuotePayload() {
       containerFolio,
       savedAt,
       generalData,
-      products: calculations.products
+      products: calculations.products,
+      totalPalletsCost: calculations.totalPalletsCost
     })
   };
 }
@@ -1210,6 +1400,7 @@ function buildSharePointRecordsFromQuote(quote) {
     SupplierName: quote.generalData.supplierName || "",
     SavedAt: savedAtIso,
     UserEmail: userEmail,
+    PayloadJSON: JSON.stringify(quote),
     PayloadJSONFull: JSON.stringify(quote),
     WarehouseCity: quote.generalData.warehouseLocation || "",
     FinalDestination: quote.generalData.finalDestination || "",
@@ -1238,6 +1429,9 @@ function buildSharePointRecordsFromQuote(quote) {
     FleteInternoOrigen: toNumber(quote.generalData.internalFreight),
     FleteInternacional: toNumber(quote.generalData.internationalFreight),
     SeguroInternacional: toNumber(quote.generalData.insuranceCost),
+    NumeroPallets: toNumber(quote.generalData.numberOfPallets),
+    CostoPorPallet: toNumber(quote.generalData.costPerPallet),
+    CostoTotalPallets: toNumber(quote.calculations.totalPalletsCost),
     PuertoIngreso: quote.generalData.entryPort || "",
     PorcentajeDAI: toNumber(quote.generalData.daiRate),
     HonorariosAduanales: toNumber(quote.generalData.customsFees),
@@ -1271,6 +1465,7 @@ function buildSharePointRecordsFromQuote(quote) {
     edge: lineItem.edge || "",
     thickness: lineItem.thickness || "",
     quality: lineItem.quality || "",
+    productDaiRate: toNumber(lineItem.productDaiRate),
     unitMeasure: lineItem.unitMeasure || "",
     quantity: toNumber(lineItem.quantity),
     unitCostForeign: toNumber(lineItem.unitCostForeign),
@@ -1285,6 +1480,7 @@ function buildSharePointRecordsFromQuote(quote) {
     localShareGTQ: toNumber(lineItem.localShareGTQ),
     landedGTQ: toNumber(lineItem.landedGTQ),
     landedPerUnitGTQ: toNumber(lineItem.landedPerUnitGTQ),
+    costWithIvaGTQ: toNumber(lineItem.costWithIvaGTQ),
     suggestedPerUnitGTQ: toNumber(lineItem.suggestedPerUnitGTQ),
     marginRate: toNumber(lineItem.marginRate),
     notes: lineItem.notes || ""
@@ -1306,6 +1502,16 @@ async function sendRecordToFlow(record) {
 }
 
 async function saveQuote() {
+  if (els.supplierName.value === MANUAL_SUPPLIER_VALUE) {
+    const savedSupplierName = saveCustomSupplierFromForm();
+    if (!savedSupplierName) {
+      window.alert("Escribe el nombre del proveedor nuevo antes de guardar.");
+      return;
+    }
+    ensureSelectOption(els.supplierName, savedSupplierName);
+    els.supplierName.value = savedSupplierName;
+  }
+
   if (!state.products.length) {
     const draft = getProductDraft();
     if (draft.productName.trim() && toNumber(draft.quantity) > 0) {
@@ -1339,6 +1545,10 @@ async function saveQuote() {
     for (const record of records) {
       await sendRecordToFlow(record);
     }
+
+    const existingQuotes = getSavedQuotes().map(normalizeSavedQuote);
+    setSavedQuotes([...existingQuotes, quote]);
+    renderSavedQuotes();
 
     window.alert(
       `Cotización enviada correctamente. Se guardaron ${records.length} registro(s) para el folio ${quote.containerFolio}.`
@@ -1414,9 +1624,17 @@ function loadQuote(id) {
 
   populateOriginPorts(quote.generalData.originCountry, quote.generalData.originPort);
   els.originPort.value = quote.generalData.originPort || "";
-  syncEntryPort();
+  if (quote.generalData.supplierName) {
+    ensureSelectOption(els.supplierName, quote.generalData.supplierName);
+    els.supplierName.value = quote.generalData.supplierName;
+  }
+  els.entryPort.value = quote.generalData.entryPort || quote.generalData.destinationPort || "";
   state.currentFolio = quote.containerFolio || "";
-  state.products = quote.products || [];
+  state.products = (quote.products || []).map((product) => ({
+    ...product,
+    finish: normalizeFinishValue(product.finish),
+    productDaiRate: product.productDaiRate ?? product.daiRate ?? "0"
+  }));
   clearProductForm();
   renderSummary();
 }
@@ -1451,6 +1669,9 @@ function resetAll() {
   els.exchangeRate.value = "7.8";
   els.daiRate.value = "12";
   els.marginRate.value = "25";
+  if (customSupplierNameInput) {
+    customSupplierNameInput.value = "";
+  }
   state.products = [];
   state.currentFolio = "";
   populateOriginPorts("");
@@ -1464,6 +1685,8 @@ els.originCountry.addEventListener("change", () => {
 });
 
 els.supplierName.addEventListener("change", applySupplierDefaults);
+customSupplierNameInput.addEventListener("input", renderSummary);
+customSupplierNameInput.addEventListener("change", renderSummary);
 
 els.destinationPort.addEventListener("change", () => {
   syncEntryPort();
@@ -1486,6 +1709,7 @@ togglePasswordBtn.addEventListener("click", togglePasswordVisibility);
 populateSupplierOptions();
 populateOriginPorts("");
 syncEntryPort();
+updateManualSupplierVisibility();
 renderSummary();
 renderSavedQuotes();
 

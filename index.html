@@ -88,6 +88,10 @@
                 <option value="MANUAL">Otro / captura manual</option>
               </select>
             </label>
+            <label id="customSupplierNameWrap" hidden>
+              <span>Nombre proveedor nuevo</span>
+              <input id="customSupplierName" name="customSupplierName" type="text" placeholder="Escribe el proveedor nuevo">
+            </label>
             <label>
               <span>Moneda</span>
               <select id="currency" name="currency">
@@ -189,8 +193,16 @@
               <input id="internationalFreight" name="internationalFreight" type="number" min="0" step="0.01" value="0">
             </label>
             <label>
-              <span>Seguro internacional (moneda proveedor)</span>
-              <input id="insuranceCost" name="insuranceCost" type="number" min="0" step="0.01" value="0">
+              <span>Seguro (0.65% sobre FOB)</span>
+              <input id="insuranceCost" name="insuranceCost" type="number" min="0" step="0.01" value="0" readonly>
+            </label>
+            <label>
+              <span>Numero de pallets</span>
+              <input id="numberOfPallets" name="numberOfPallets" type="number" min="0" step="1" value="0">
+            </label>
+            <label>
+              <span>Costo por pallet (Q)</span>
+              <input id="costPerPallet" name="costPerPallet" type="number" min="0" step="0.01" value="0">
             </label>
           </div>
         </article>
@@ -303,9 +315,10 @@
               <select id="finish" name="finish">
                 <option value="">Seleccionar acabado</option>
                 <option value="Mate">Mate</option>
-                <option value="Brillante">Brillante</option>
+                <option value="BRILLO">BRILLO</option>
                 <option value="Satinado">Satinado</option>
                 <option value="Pulido">Pulido</option>
+                <option value="Carving">Carving</option>
                 <option value="Rustico">Rustico</option>
                 <option value="Texturizado">Texturizado</option>
               </select>
@@ -365,6 +378,10 @@
             <label>
               <span>Embalaje total (moneda proveedor)</span>
               <input id="packagingCost" name="packagingCost" type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>
+              <span>DAI % producto</span>
+              <input id="productDaiRate" name="productDaiRate" type="number" min="0" step="0.01" value="0">
             </label>
             <label>
               <span>Margen objetivo %</span>
